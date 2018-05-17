@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,6 +47,7 @@ public class Category extends Fragment {
     GridLayoutManager manager;
     List<Model> list;
     CategoryAdapter adapter;
+    Toolbar toolbar;
 
     @Nullable
     @Override
@@ -48,6 +55,8 @@ public class Category extends Fragment {
         View view = inflater.inflate(R.layout.category_layout, container, false);
 
         list = new ArrayList<>();
+
+        toolbar = ((MainActivity)getActivity()).findViewById(R.id.toolbar);
 
         progress = view.findViewById(R.id.progress);
         pager = view.findViewById(R.id.pager);
@@ -61,6 +70,9 @@ public class Category extends Fragment {
         grid.setLayoutManager(manager);
 
 
+        BannerAdapter adap = new BannerAdapter(getChildFragmentManager());
+        pager.setAdapter(adap);
+        indicator.setViewPager(pager);
 
 
         return view;
@@ -69,6 +81,8 @@ public class Category extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        toolbar.setTitle("Category");
 
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getContext().getApplicationContext();
@@ -129,13 +143,37 @@ public class Category extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-            Model item = list.get(position);
+            final Model item = list.get(position);
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
             ImageLoader loader = ImageLoader.getInstance();
             loader.displayImage(item.getImageUrl().toString() , holder.image , options);
 
+            Log.d("image" , item.getImageUrl().toString());
+
             holder.title.setText(item.getName());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();
+
+                    FragmentTransaction ft = fm.beginTransaction();
+
+                    SubCategory frag = new SubCategory();
+
+                    frag.setData(item.getChildren() , item.getChild() , item.getName());
+
+                    ft.replace(R.id.replace , frag);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    ft.addToBackStack(null);
+                    ft.commit();
+
+
+                }
+            });
 
         }
 
@@ -156,6 +194,57 @@ public class Category extends Fragment {
                 title = itemView.findViewById(R.id.textView2);
 
             }
+        }
+    }
+
+    class BannerAdapter extends FragmentStatePagerAdapter
+    {
+
+        int bannersp[] = new int[]{
+                R.drawable.banner1,
+                R.drawable.banner2,
+                R.drawable.banner3,
+                R.drawable.banner4
+        };
+
+        public BannerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            page frag = new page();
+            Bundle b = new Bundle();
+            b.putInt("id" , bannersp[position]);
+            frag.setArguments(b);
+            return frag;
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+    }
+
+    public static class page extends Fragment
+    {
+
+        int id;
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.page_layout , container , false);
+
+            Bundle b = getArguments();
+            id = b.getInt("id");
+
+            ImageView image = view.findViewById(R.id.image);
+
+            image.setImageResource(id);
+
+            return view;
+
         }
     }
 

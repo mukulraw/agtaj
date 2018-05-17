@@ -30,7 +30,7 @@ public class Model {
     private Object thumbnailUrl;
     @SerializedName("image_url")
     @Expose
-    private Boolean imageUrl;
+    private Object imageUrl;
     @SerializedName("children")
     @Expose
     private List<String> children = null;
@@ -94,11 +94,11 @@ public class Model {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public Boolean getImageUrl() {
+    public Object getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(Boolean imageUrl) {
+    public void setImageUrl(Object imageUrl) {
         this.imageUrl = imageUrl;
     }
 

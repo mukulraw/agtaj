@@ -82,13 +82,13 @@ public class Splash extends AppCompatActivity {
                         edit.putString("email" , e);
                         edit.putString("pass" , p);
                         edit.putString("id" , response.body().getModel().getEntityId());
-                        edit.putString("id" , response.body().getModel().getName());
+                        edit.putString("name" , response.body().getModel().getName());
                         edit.apply();
 
                         Toast.makeText(Splash.this , "Welcome " + response.body().getModel().getName() , Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(Splash.this , MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
 

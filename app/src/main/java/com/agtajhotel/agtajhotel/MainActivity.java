@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,10 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import im.delight.android.webview.AdvancedWebView;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity{
     DrawerLayout drawer;
     String id;
 
+    TextView logout;
+
 
 
     @Override
@@ -53,17 +60,19 @@ public class MainActivity extends AppCompatActivity{
 
         toolbar = findViewById(R.id.toolbar);
         replace = findViewById(R.id.replace);
+        logout = findViewById(R.id.logout);
 
         userame = findViewById(R.id.textView3);
 
 
         id = pref.getString("id" , "");
-        name = pref.getString("name" , "");
-        userame.setText(name);
+
 
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        toolbar.setTitleTextColor(Color.WHITE);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,10 +87,59 @@ public class MainActivity extends AppCompatActivity{
         //ft.addToBackStack(null);
         ft.commit();
 
+
+        toolbar.setTitle("Category");
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                edit.remove("email");
+                edit.remove("pass");
+                edit.remove("id");
+                edit.remove("name");
+                edit.apply();
+
+                Intent intent = new Intent(MainActivity.this , Splash.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        name = pref.getString("name" , "");
+        userame.setText("Hi, " + name);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.cart:
+                Toast.makeText(getApplicationContext(),"Item 2 Selected", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
 }
