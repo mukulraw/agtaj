@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,16 +20,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
+
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
 import im.delight.android.webview.AdvancedWebView;
-
-
-
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -47,6 +61,10 @@ public class MainActivity extends AppCompatActivity{
 
     TextView logout;
 
+    ImageButton search;
+    ImageView cart;
+
+    TextView count;
 
 
     @Override
@@ -61,6 +79,10 @@ public class MainActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar);
         replace = findViewById(R.id.replace);
         logout = findViewById(R.id.logout);
+
+        count = findViewById(R.id.textView4);
+        search = findViewById(R.id.imageButton);
+        cart = findViewById(R.id.imageView5);
 
         userame = findViewById(R.id.textView3);
 
@@ -118,16 +140,77 @@ public class MainActivity extends AppCompatActivity{
         name = pref.getString("name" , "");
         userame.setText("Hi, " + name);
 
+
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MainActivity.this), CookiePolicy.ACCEPT_ALL);
+
+        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.cookieJar(cookieJar);
+        OkHttpClient client = builder.build();
+
+
+        //progress.setVisibility(View.VISIBLE);
+        final bean b1 = (bean) getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b1.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<cartCountBean> call = cr.getCartCount();
+
+        call.enqueue(new Callback<cartCountBean>() {
+            @Override
+            public void onResponse(Call<cartCountBean> call, Response<cartCountBean> response) {
+
+                edit.putString("count" , response.body().getModel().getNum().toString());
+                edit.apply();
+
+                if (count != null)
+                {
+                    setCount();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<cartCountBean> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(item, R.layout.cart_count);
+        View view = MenuItemCompat.getActionView(item);
+        counn = view.findViewById(R.id.textView4);
+
+        setCount();
+
         return true;
+    }*/
+
+
+    public void setCount()
+    {
+        count.setText(pref.getString("count" , "0"));
     }
 
 
-    @Override
+
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
@@ -139,7 +222,7 @@ public class MainActivity extends AppCompatActivity{
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
 
 }

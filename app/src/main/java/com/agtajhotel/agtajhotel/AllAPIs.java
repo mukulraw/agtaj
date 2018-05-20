@@ -1,5 +1,8 @@
 package com.agtajhotel.agtajhotel;
 
+import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
+import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
+import com.agtajhotel.agtajhotel.cartPOJO.cartBean;
 import com.agtajhotel.agtajhotel.categoryPOJO.categoryBean;
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
 import com.agtajhotel.agtajhotel.productListPOJO.productListBean;
@@ -7,6 +10,7 @@ import com.agtajhotel.agtajhotel.singleProductPOJO.singleProductBean;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 public interface AllAPIs {
@@ -45,5 +49,17 @@ public interface AllAPIs {
     Call<singleProductBean> getProductData(
             @Query("product_id") String id
     );
+
+    @GET("mobileapi/cart/add")
+    Call<addCartBean> addToCart(
+            @Query("product_id") String id,
+            @Query("qty") String quantity
+    );
+
+    @GET("mobileapi/cart/getQty")
+    Call<cartCountBean> getCartCount();
+
+    @GET("mobileapi/cart/getCartInfo")
+    Call<cartBean> getCart();
 
 }

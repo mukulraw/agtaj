@@ -1,6 +1,8 @@
 package com.agtajhotel.agtajhotel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +17,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
 import com.agtajhotel.agtajhotel.singleProductPOJO.singleProductBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -156,6 +165,73 @@ public class SingleProduct extends Fragment {
             }
         });
 
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CookieManager cookieManager = new CookieManager(new PersistentCookieStore(getContext()), CookiePolicy.ACCEPT_ALL);
+
+                CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.cookieJar(cookieJar);
+                OkHttpClient client = builder.build();
+
+
+                progress.setVisibility(View.VISIBLE);
+                final bean b1 = (bean) getContext().getApplicationContext();
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b1.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                Call<addCartBean> call = cr.addToCart(id , quantity.getText().toString());
+
+                call.enqueue(new Callback<addCartBean>() {
+                    @Override
+                    public void onResponse(Call<addCartBean> call, Response<addCartBean> response) {
+
+
+                        if (response.body().getCode() == 0)
+                        {
+
+                            Toast.makeText(getContext() , "Added successfully" , Toast.LENGTH_SHORT).show();
+
+                            SharedPreferences pref = getActivity().getSharedPreferences("pref" , Context.MODE_PRIVATE);
+                            SharedPreferences.Editor edit = pref.edit();
+
+                            edit.putString("count" , response.body().getModel().getItemsQty().toString());
+                            edit.apply();
+
+                            MainActivity act = ((MainActivity)getActivity());
+
+                            act.setCount();
+
+                        }
+                        else
+                        {
+
+                            Toast.makeText(getContext() , response.body().getMsg().toString() , Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<addCartBean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        });
 
         return view;
     }

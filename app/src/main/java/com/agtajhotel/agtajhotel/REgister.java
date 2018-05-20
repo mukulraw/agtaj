@@ -15,6 +15,11 @@ import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,6 +94,12 @@ public class REgister extends AppCompatActivity {
                                 {
                                     if (rp.equals(pa))
                                     {
+                                        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(REgister.this), CookiePolicy.ACCEPT_ALL);
+
+                                        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                                        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                                        builder.cookieJar(cookieJar);
+                                        OkHttpClient client = builder.build();
 
                                         progress.setVisibility(View.VISIBLE);
                                         final bean b = (bean) getApplicationContext();
@@ -96,6 +107,7 @@ public class REgister extends AppCompatActivity {
                                                 .baseUrl(b.BASE_URL)
                                                 .addConverterFactory(ScalarsConverterFactory.create())
                                                 .addConverterFactory(GsonConverterFactory.create())
+                                                .client(client)
                                                 .build();
                                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
@@ -111,6 +123,7 @@ public class REgister extends AppCompatActivity {
                                                     edit.putString("pass" , pa);
                                                     edit.putString("id" , response.body().getModel().getEntityId());
                                                     edit.putString("name" , response.body().getModel().getName());
+                                                    edit.putString("cookie" , response.body().getModel().getSession());
                                                     edit.apply();
 
                                                     Toast.makeText(REgister.this , "Welcome " + response.body().getModel().getName() , Toast.LENGTH_SHORT).show();

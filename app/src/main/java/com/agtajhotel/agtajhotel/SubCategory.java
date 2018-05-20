@@ -1,6 +1,7 @@
 package com.agtajhotel.agtajhotel;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,20 +18,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.GridLayoutAnimationController;
+
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
 import com.agtajhotel.agtajhotel.productListPOJO.Model;
 import com.agtajhotel.agtajhotel.productListPOJO.productListBean;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -218,7 +227,9 @@ public class SubCategory extends Fragment {
             }
 
             @Override
-            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+
+                holder.setIsRecyclable(false);
 
                 final Model item = list.get(position);
 
@@ -228,6 +239,40 @@ public class SubCategory extends Fragment {
 
                 holder.title.setText(item.getName());
                 holder.price.setText(item.getSymbol() + " " + item.getPrice());
+
+
+
+                holder.add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String qt = holder.quantity.getText().toString();
+                        int q = Integer.parseInt(qt);
+
+                        q++;
+
+                        holder.quantity.setText(String.valueOf(q));
+
+                    }
+                });
+
+
+                holder.remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String qt = holder.quantity.getText().toString();
+                        int q = Integer.parseInt(qt);
+
+                        if (q > 1)
+                        {
+                            q--;
+                        }
+                        holder.quantity.setText(String.valueOf(q));
+
+                    }
+                });
+
 
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +300,82 @@ public class SubCategory extends Fragment {
                 });
 
 
+
+                holder.addCart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.d("id" , item.getEntityId());
+
+
+
+
+                        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
+
+                        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                        builder.cookieJar(cookieJar);
+                        OkHttpClient client = builder.build();
+
+
+                        progress.setVisibility(View.VISIBLE);
+                        final bean b1 = (bean) getContext().getApplicationContext();
+                        final Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(b1.BASE_URL)
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .client(client)
+                                .build();
+                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                        Call<addCartBean> call = cr.addToCart(item.getEntityId() , holder.quantity.getText().toString());
+
+                        call.enqueue(new Callback<addCartBean>() {
+                            @Override
+                            public void onResponse(Call<addCartBean> call, Response<addCartBean> response) {
+
+
+                                if (response.body().getCode() == 0)
+                                {
+
+                                    Toast.makeText(context , "Added successfully" , Toast.LENGTH_SHORT).show();
+
+                                    SharedPreferences pref = context.getSharedPreferences("pref" , Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor edit = pref.edit();
+
+                                    edit.putString("count" , response.body().getModel().getItemsQty().toString());
+                                    edit.apply();
+
+                                    MainActivity act = ((MainActivity)context);
+
+                                    act.setCount();
+
+                                }
+                                else
+                                {
+
+                                    Toast.makeText(context , response.body().getMsg().toString() , Toast.LENGTH_SHORT).show();
+
+                                }
+
+
+                                progress.setVisibility(View.GONE);
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<addCartBean> call, Throwable t) {
+                                progress.setVisibility(View.GONE);
+                            }
+                        });
+
+
+
+                    }
+                });
+
+
             }
 
             @Override
@@ -266,17 +387,20 @@ public class SubCategory extends Fragment {
             {
 
                 RoundedImageView image;
-                TextView price , title;
+                TextView price , title , quantity;
                 ImageButton add , remove;
+                Button addCart;
 
                 public ViewHolder(View itemView) {
                     super(itemView);
 
                     image = itemView.findViewById(R.id.image);
                     price = itemView.findViewById(R.id.textView);
-                    add = itemView.findViewById(R.id.imageButton);
-                    remove = itemView.findViewById(R.id.imageButton2);
+                    add = itemView.findViewById(R.id.imageButton3);
+                    remove = itemView.findViewById(R.id.imageButton4);
                     title = itemView.findViewById(R.id.textView5);
+                    quantity = itemView.findViewById(R.id.editText9);
+                    addCart = itemView.findViewById(R.id.button5);
 
                 }
             }

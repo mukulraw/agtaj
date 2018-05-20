@@ -16,6 +16,15 @@ import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
+
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
+import retrofit.client.Client;
+
+import retrofit.client.OkClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,12 +82,22 @@ public class Login extends AppCompatActivity {
                     if (p.length() > 0)
                     {
 
+                        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(Login.this), CookiePolicy.ACCEPT_ALL);
+
+                        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                        builder.cookieJar(cookieJar);
+                        OkHttpClient client = builder.build();
+
+
+
                         progress.setVisibility(View.VISIBLE);
                         final bean b = (bean) getApplicationContext();
                         final Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl(b.BASE_URL)
                                 .addConverterFactory(ScalarsConverterFactory.create())
                                 .addConverterFactory(GsonConverterFactory.create())
+                                .client(client)
                                 .build();
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
@@ -94,6 +113,7 @@ public class Login extends AppCompatActivity {
                                     edit.putString("pass" , p);
                                     edit.putString("id" , response.body().getModel().getEntityId());
                                     edit.putString("name" , response.body().getModel().getName());
+                                    edit.putString("cookie" , response.body().getModel().getSession());
                                     edit.apply();
 
                                     Toast.makeText(Login.this , "Welcome " + response.body().getModel().getName() , Toast.LENGTH_SHORT).show();
