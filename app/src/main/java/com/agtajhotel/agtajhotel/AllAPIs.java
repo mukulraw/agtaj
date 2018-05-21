@@ -2,6 +2,7 @@ package com.agtajhotel.agtajhotel;
 
 import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
 import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
+import com.agtajhotel.agtajhotel.cartDeletePOJO.cartRemoveBean;
 import com.agtajhotel.agtajhotel.cartPOJO.cartBean;
 import com.agtajhotel.agtajhotel.categoryPOJO.categoryBean;
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
@@ -61,5 +62,16 @@ public interface AllAPIs {
 
     @GET("mobileapi/cart/getCartInfo")
     Call<cartBean> getCart();
+
+    @GET("mobileapi/cart/update")
+    Call<cartBean> updateCart(
+            @Query("cart_item_id") String id,
+            @Query("qty") String quantity
+    );
+
+    @GET("mobileapi/cart/removeCart")
+    Call<cartRemoveBean> removeCart(
+            @Query("cart_item_id") String id
+    );
 
 }

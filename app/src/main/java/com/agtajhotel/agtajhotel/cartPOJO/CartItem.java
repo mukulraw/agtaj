@@ -36,7 +36,7 @@ public class CartItem {
     private List<CustomOption> customOption = null;
     @SerializedName("item_price")
     @Expose
-    private Integer itemPrice;
+    private Float itemPrice;
     @SerializedName("bundle_option")
     @Expose
     private List<BundleOption> bundleOption = null;
@@ -113,11 +113,11 @@ public class CartItem {
         this.customOption = customOption;
     }
 
-    public Integer getItemPrice() {
+    public Float getItemPrice() {
         return itemPrice;
     }
 
-    public void setItemPrice(Integer itemPrice) {
+    public void setItemPrice(Float itemPrice) {
         this.itemPrice = itemPrice;
     }
 
