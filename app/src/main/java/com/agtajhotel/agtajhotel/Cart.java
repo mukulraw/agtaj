@@ -1,6 +1,7 @@
 package com.agtajhotel.agtajhotel;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class Cart extends AppCompatActivity {
     GridLayoutManager manager;
     List<CartItem> list;
     CartAdapter adapter;
+    float count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +64,28 @@ public class Cart extends AppCompatActivity {
         checkout = findViewById(R.id.button8);
         total = findViewById(R.id.textView15);
 
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("Cart");
+        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+
+        });
+
+
         manager = new GridLayoutManager(this , 1);
         adapter = new CartAdapter(this , list);
 
         grid.setAdapter(adapter);
         grid.setLayoutManager(manager);
+
+
 
 
 
@@ -78,6 +97,7 @@ public class Cart extends AppCompatActivity {
         super.onResume();
 
 
+
         loadData();
 
 
@@ -85,6 +105,9 @@ public class Cart extends AppCompatActivity {
 
     public void loadData()
     {
+
+        count = 0;
+
         progress.setVisibility(View.VISIBLE);
 
         CookieManager cookieManager = new CookieManager(new PersistentCookieStore(Cart.this), CookiePolicy.ACCEPT_ALL);
@@ -111,7 +134,17 @@ public class Cart extends AppCompatActivity {
 
                 if (response.body().getCode() == 0)
                 {
-                    adapter.setGridData(response.body().getModel().getCartItems());
+                    if (response.body().getModel().getCartItems().size() > 0)
+                    {
+                        adapter.setGridData(response.body().getModel().getCartItems());
+                    }
+                    else
+                    {
+                        adapter.setGridData(response.body().getModel().getCartItems());
+                        total.setText("0.00");
+                    }
+
+
                 }
                 else
                 {
@@ -132,14 +165,14 @@ public class Cart extends AppCompatActivity {
             }
         });
 
-        total.setText(String.valueOf(adapter.getCount()));
+        //total.setText(String.valueOf(adapter.getCount()));
     }
 
     class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>
     {
         Context context;
         List<CartItem> list = new ArrayList<>();
-        float count = 0;
+        Cart car;
 
 
         public CartAdapter(Context context , List<CartItem> list)
@@ -154,23 +187,28 @@ public class Cart extends AppCompatActivity {
             notifyDataSetChanged();
         }
 
-        public float getCount()
-        {
-            return count;
-        }
+
 
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            car = (Cart)context;
             View view = inflater.inflate(R.layout.cart_list_model , parent , false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
             final CartItem item = list.get(position);
+
+
+            car.count = car.count + (item.getItemPrice() * item.getQty());
+
+
+            car.total.setText(String.valueOf(car.count));
+
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
             ImageLoader loader = ImageLoader.getInstance();
@@ -182,7 +220,7 @@ public class Cart extends AppCompatActivity {
 
             holder.quantity.setText(String.valueOf(item.getQty()));
 
-            count = count + item.getItemPrice();
+
 
             holder.plus.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -206,7 +244,9 @@ public class Cart extends AppCompatActivity {
                             .build();
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                    Call<cartBean> call = cr.updateCart(item.getCartItemId() , String.valueOf(item.getQty() + 1));
+                    int f = Integer.parseInt(holder.quantity.getText().toString());
+
+                    Call<cartBean> call = cr.updateCart(item.getCartItemId() , String.valueOf(f + 1));
 
                     call.enqueue(new Callback<cartBean>() {
                         @Override
@@ -252,7 +292,9 @@ public class Cart extends AppCompatActivity {
                                 .build();
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                        Call<cartBean> call = cr.updateCart(item.getCartItemId() , String.valueOf(item.getQty() - 1));
+                        int f = Integer.parseInt(holder.quantity.getText().toString());
+
+                        Call<cartBean> call = cr.updateCart(item.getCartItemId() , String.valueOf(f - 1));
 
                         call.enqueue(new Callback<cartBean>() {
                             @Override

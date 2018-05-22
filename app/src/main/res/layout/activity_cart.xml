@@ -45,11 +45,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Rs 200.00"
+        android:layout_marginStart="8dp"
+        android:text="0.00"
         android:textColor="#ffffff"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
     <ProgressBar
@@ -68,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Total"
+        android:text="Total  Rs "
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#ffffff"

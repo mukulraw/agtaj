@@ -63,9 +63,10 @@ public interface AllAPIs {
     @GET("mobileapi/cart/getCartInfo")
     Call<cartBean> getCart();
 
+
     @GET("mobileapi/cart/update")
     Call<cartBean> updateCart(
-            @Query("cart_item_id") String id,
+            @Query("cart") String id,
             @Query("qty") String quantity
     );
 

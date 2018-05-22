@@ -33,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/banner2" />
+        />
 
     <TextView
         android:id="@+id/textView17"
@@ -56,28 +56,29 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/add"
         android:padding="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/button5"
         app:layout_constraintStart_toEndOf="@+id/editText9"
         app:layout_constraintTop_toTopOf="@+id/imageButton4" />
 
-    <TextView
-        android:id="@+id/editText9"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/edit_back_grey"
-        android:ems="10"
-        android:gravity="center"
-        android:inputType="number"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:singleLine="true"
-        android:text="1"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
-        app:layout_constraintStart_toEndOf="@+id/imageButton4"
-        app:layout_constraintTop_toTopOf="@+id/imageButton4" />
+        <TextView
+            android:id="@+id/editText9"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_back_grey"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/imageButton4"
+            app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <ImageButton
         android:id="@+id/imageButton4"
@@ -87,6 +88,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/remove"
+        android:visibility="gone"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
