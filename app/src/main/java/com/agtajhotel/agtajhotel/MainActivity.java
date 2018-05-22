@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity{
 
     TextView logout;
 
+    TextView home , caart , wishlist;
+
     ImageButton search;
     ImageView cart;
 
@@ -79,6 +81,10 @@ public class MainActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar);
         replace = findViewById(R.id.replace);
         logout = findViewById(R.id.logout);
+
+        home = findViewById(R.id.home);
+        caart = findViewById(R.id.cart);
+        wishlist = findViewById(R.id.wishlist);
 
         count = findViewById(R.id.textView4);
         search = findViewById(R.id.imageButton);
@@ -130,6 +136,47 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+
+
+        caart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this , Cart.class);
+                startActivity(intent);
+            }
+        });
+
+
+        wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this , Wishlist.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = getSupportFragmentManager();
+
+                for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                    fm.popBackStack();
+                }
+
+                FragmentTransaction ft = fm.beginTransaction();
+                Category frag1 = new Category();
+                ft.replace(R.id.replace , frag1);
+                //ft.addToBackStack(null);
+                ft.commit();
+
+            }
+        });
+
 
         cart.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
+import com.agtajhotel.agtajhotel.addWishlistPOJO.addWishlistbean;
 import com.agtajhotel.agtajhotel.singleProductPOJO.singleProductBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -164,6 +165,66 @@ public class SingleProduct extends Fragment {
 
             }
         });
+
+
+
+        addWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CookieManager cookieManager = new CookieManager(new PersistentCookieStore(getContext()), CookiePolicy.ACCEPT_ALL);
+
+                CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.cookieJar(cookieJar);
+                OkHttpClient client = builder.build();
+
+
+                progress.setVisibility(View.VISIBLE);
+                final bean b1 = (bean) getContext().getApplicationContext();
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b1.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                Call<addWishlistbean> call = cr.addWishlist(id);
+
+                call.enqueue(new Callback<addWishlistbean>() {
+                    @Override
+                    public void onResponse(Call<addWishlistbean> call, Response<addWishlistbean> response) {
+
+
+                        if (response.body().getCode() == 0)
+                        {
+
+                            Toast.makeText(getContext() , response.body().getMsg() , Toast.LENGTH_SHORT).show();
+
+                        }
+                        else
+                        {
+
+                            Toast.makeText(getContext() , response.body().getMsg().toString() , Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<addWishlistbean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        });
+
 
 
         add.setOnClickListener(new View.OnClickListener() {

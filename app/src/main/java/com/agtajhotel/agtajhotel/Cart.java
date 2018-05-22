@@ -87,6 +87,21 @@ public class Cart extends AppCompatActivity {
 
 
 
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Float q = Float.parseFloat(total.getText().toString());
+
+                if (q > 0)
+                {
+
+
+
+                }
+
+            }
+        });
 
 
 
