@@ -1,6 +1,7 @@
 package com.agtajhotel.agtajhotel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -96,6 +97,9 @@ public class Cart extends AppCompatActivity {
                 if (q > 0)
                 {
 
+
+                    Intent intent = new Intent(Cart.this , BillingInfo.class);
+                    startActivity(intent);
 
 
                 }

@@ -24,7 +24,9 @@
         <activity android:name=".REgister" />
         <activity android:name=".Cart" />
         <activity android:name=".Wishlist" />
-        <activity android:name=".BillingInfo"></activity>
+        <activity android:name=".BillingInfo" />
+        <activity android:name=".ShippingInfo" />
+        <activity android:name=".ShippingMethod"></activity>
     </application>
 
 </manifest>
