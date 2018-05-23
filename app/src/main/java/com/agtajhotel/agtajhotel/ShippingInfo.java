@@ -35,11 +35,14 @@ public class ShippingInfo extends AppCompatActivity {
     EditText first, last, company, address, city, state, zip, phone;
     CheckBox ship;
     Button next;
+    String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping_info);
+
+        price = getIntent().getStringExtra("price");
 
         toolbar = findViewById(R.id.toolbar3);
         spinner = findViewById(R.id.spinner);
@@ -138,8 +141,14 @@ public class ShippingInfo extends AppCompatActivity {
                                                     @Override
                                                     public void onResponse(Call<shippingBean> call, Response<shippingBean> response) {
 
-                                                        Intent intent = new Intent(ShippingInfo.this , ShippingMethod.class);
-                                                        startActivity(intent);
+                                                        if (response.body().getCode() == 0)
+                                                        {
+                                                            Intent intent = new Intent(ShippingInfo.this , ShippingMethod.class);
+                                                            intent.putExtra("price" , price);
+                                                            startActivity(intent);
+                                                        }
+
+
 
                                                         progress.setVisibility(View.GONE);
                                                     }

@@ -99,6 +99,7 @@ public class Cart extends AppCompatActivity {
 
 
                     Intent intent = new Intent(Cart.this , BillingInfo.class);
+                    intent.putExtra("price" , total.getText().toString());
                     startActivity(intent);
 
 

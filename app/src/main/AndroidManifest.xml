@@ -26,7 +26,12 @@
         <activity android:name=".Wishlist" />
         <activity android:name=".BillingInfo" />
         <activity android:name=".ShippingInfo" />
-        <activity android:name=".ShippingMethod"></activity>
+        <activity android:name=".ShippingMethod" />
+        <activity android:name=".PaymentInfo" />
+        <activity android:name=".OrderSummary" />
+        <activity android:name=".WebViewActivity" />
+        <activity android:name=".StatusActivity" />
+        <activity android:name=".Orders"></activity>
     </application>
 
 </manifest>

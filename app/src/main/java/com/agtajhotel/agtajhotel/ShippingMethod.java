@@ -1,5 +1,6 @@
 package com.agtajhotel.agtajhotel;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.shippingMethodListPOJO.shippingMethodListBean;
+import com.agtajhotel.agtajhotel.shippingMethodPOJO.shippingMethodBean;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -31,10 +34,14 @@ public class ShippingMethod extends AppCompatActivity {
     Button next;
     ProgressBar progress;
 
+    String price;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping_method);
+
+        price = getIntent().getStringExtra("price");
 
         toolbar = findViewById(R.id.toolbar4);
         group = findViewById(R.id.radioGroup);
@@ -72,7 +79,7 @@ public class ShippingMethod extends AppCompatActivity {
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<shippingMethodListBean> call = cr.getShippingMethods();
+        final Call<shippingMethodListBean> call = cr.getShippingMethods();
 
         call.enqueue(new Callback<shippingMethodListBean>() {
             @Override
@@ -81,7 +88,8 @@ public class ShippingMethod extends AppCompatActivity {
                 for (int i = 0 ; i < response.body().getModel().getFlatRate().size() ; i++)
                 {
                     RadioButton rb = new RadioButton(ShippingMethod.this);
-                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle());
+                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle() + " " + response.body().getModel().getFlatRate().get(i).getPrice());
+                    group.addView(rb);
                 }
 
                 progress.setVisibility(View.GONE);
@@ -93,6 +101,68 @@ public class ShippingMethod extends AppCompatActivity {
             }
         });
 
+
+
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int id = group.getCheckedRadioButtonId();
+
+                if (id != -1)
+                {
+
+
+                    progress.setVisibility(View.VISIBLE);
+
+                    CookieManager cookieManager = new CookieManager(new PersistentCookieStore(ShippingMethod.this), CookiePolicy.ACCEPT_ALL);
+
+                    CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                    builder.cookieJar(cookieJar);
+                    OkHttpClient client = builder.build();
+
+                    final bean b = (bean) getApplicationContext();
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .client(client)
+                            .build();
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                    Call<shippingMethodBean> call1 = cr.setShippingMethod("flatrate_flatrate");
+
+                    call1.enqueue(new Callback<shippingMethodBean>() {
+                        @Override
+                        public void onResponse(Call<shippingMethodBean> call, Response<shippingMethodBean> response) {
+
+
+                            Intent intent = new Intent(ShippingMethod.this , PaymentInfo.class);
+                            intent.putExtra("price" , price);
+                            startActivity(intent);
+
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<shippingMethodBean> call, Throwable t) {
+                            progress.setVisibility(View.GONE);
+                        }
+                    });
+
+
+                }
+                else
+                {
+                    Toast.makeText(ShippingMethod.this , "Please choose a shipping method" , Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
 
 

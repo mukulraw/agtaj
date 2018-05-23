@@ -1,6 +1,7 @@
 package com.agtajhotel.agtajhotel;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,11 +21,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,8 @@ import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
+import java.util.List;
 
 import im.delight.android.webview.AdvancedWebView;
 import okhttp3.CookieJar;
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
 
     TextView logout;
 
-    TextView home , caart , wishlist;
+    TextView home , caart , wishlist , orders;
 
     ImageButton search;
     ImageView cart;
@@ -89,6 +95,7 @@ public class MainActivity extends AppCompatActivity{
         count = findViewById(R.id.textView4);
         search = findViewById(R.id.imageButton);
         cart = findViewById(R.id.imageView5);
+        orders = findViewById(R.id.orders);
 
         userame = findViewById(R.id.textView3);
 
@@ -137,6 +144,13 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this , Orders.class);
+                startActivity(intent);
+            }
+        });
 
         caart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +201,56 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+
+        List<String> l1 = new ArrayList<>();
+        List<String> l2 = new ArrayList<>();
+
+        l1.add("Dhanbad");
+
+
+        l2.add("Hirapur");
+        l2.add("Jharia");
+        l2.add("Bank More");
+        l2.add("Steel Gate");
+        l2.add("Govindpur");
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.main_popup);
+        dialog.show();
+
+
+        Spinner spinner1 = dialog.findViewById(R.id.spinner2);
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, l1);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner1.setAdapter(dataAdapter);
+
+        Spinner spinner2 = dialog.findViewById(R.id.spinner3);
+
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, l2);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner2.setAdapter(dataAdapter1);
+
+        Button submit = dialog.findViewById(R.id.button14);
+
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+
+            }
+        });
+
 
     }
 

@@ -8,10 +8,13 @@ import com.agtajhotel.agtajhotel.cartDeletePOJO.cartRemoveBean;
 import com.agtajhotel.agtajhotel.cartPOJO.cartBean;
 import com.agtajhotel.agtajhotel.categoryPOJO.categoryBean;
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
+import com.agtajhotel.agtajhotel.ordersPOJO.ordersBean;
 import com.agtajhotel.agtajhotel.productListPOJO.productListBean;
 import com.agtajhotel.agtajhotel.shippingMethodListPOJO.shippingMethodListBean;
+import com.agtajhotel.agtajhotel.shippingMethodPOJO.shippingMethodBean;
 import com.agtajhotel.agtajhotel.shippingPOJO.shippingBean;
 import com.agtajhotel.agtajhotel.singleProductPOJO.singleProductBean;
+import com.agtajhotel.agtajhotel.successPOJO.successBean;
 import com.agtajhotel.agtajhotel.wishlistPOJO.wishlostbean;
 
 import retrofit2.Call;
@@ -133,5 +136,30 @@ public interface AllAPIs {
 
     @GET("mobileapi/checkout/getShippingMethodsList")
     Call<shippingMethodListBean> getShippingMethods();
+
+
+    @Multipart
+    @POST("mobileapi/checkout/setShippingMethod")
+    Call<shippingMethodBean> setShippingMethod(
+            @Part("shipping_method") String method
+    );
+
+    @Multipart
+    @POST("mobileapi/checkout/setPayMethod")
+    Call<shippingMethodBean> setPaymentMethod(
+            @Part("payment[method]") String method
+    );
+
+    @GET("mobileapi/checkout/getFormKey")
+    Call<formBean> getFormKey();
+
+    @GET("mobileapi/checkout/success")
+    Call<successBean> success();
+
+
+    @GET("mobileapi/order/getorderlist")
+    Call<ordersBean> getOrders();
+
+
 
 }

@@ -2,6 +2,7 @@ package com.agtajhotel.agtajhotel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,6 +69,19 @@ public class Wishlist extends AppCompatActivity {
         grid.setAdapter(adapter);
 
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("Wishlist");
+        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+
+        });
+
 
     }
 
@@ -109,7 +123,11 @@ public class Wishlist extends AppCompatActivity {
             @Override
             public void onResponse(Call<wishlostbean> call, Response<wishlostbean> response) {
 
-                adapter.setGridData(response.body().getModel().getProducts());
+                if (response.body().getCode() == 0)
+                {
+                    adapter.setGridData(response.body().getModel().getProducts());
+                }
+
 
                 progress.setVisibility(View.GONE);
             }

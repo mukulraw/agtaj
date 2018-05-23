@@ -36,11 +36,14 @@ public class BillingInfo extends AppCompatActivity {
     EditText first, last, company, address, city, state, zip, phone;
     CheckBox ship;
     Button next;
+    String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_billing_info);
+
+        price = getIntent().getStringExtra("price");
 
         toolbar = findViewById(R.id.toolbar3);
         spinner = findViewById(R.id.spinner);
@@ -142,8 +145,15 @@ public class BillingInfo extends AppCompatActivity {
                                                         @Override
                                                         public void onResponse(Call<billingBean> call, Response<billingBean> response) {
 
-                                                            Intent intent = new Intent(BillingInfo.this, ShippingMethod.class);
-                                                            startActivity(intent);
+
+                                                            if (response.body().getCode() == 0)
+                                                            {
+                                                                Intent intent = new Intent(BillingInfo.this, ShippingMethod.class);
+                                                                intent.putExtra("price" , price);
+                                                                startActivity(intent);
+                                                            }
+
+
 
                                                             progress.setVisibility(View.GONE);
                                                         }
@@ -197,8 +207,14 @@ public class BillingInfo extends AppCompatActivity {
                                                         @Override
                                                         public void onResponse(Call<billingBean> call, Response<billingBean> response) {
 
-                                                            Intent intent = new Intent(BillingInfo.this, ShippingInfo.class);
-                                                            startActivity(intent);
+                                                            if (response.body().getCode() == 0)
+                                                            {
+                                                                Intent intent = new Intent(BillingInfo.this, ShippingInfo.class);
+                                                                intent.putExtra("price" , price);
+                                                                startActivity(intent);
+                                                            }
+
+
 
 
                                                             progress.setVisibility(View.GONE);

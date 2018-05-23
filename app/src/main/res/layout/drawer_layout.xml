@@ -78,6 +78,7 @@
             android:padding="10dp"
             android:text="My Wishlist"
             android:id="@+id/wishlist"
+            android:visibility="gone"
             />
 
         <TextView
@@ -93,6 +94,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="My Profile"
+            android:visibility="gone"
             android:id="@+id/profile"
             />
 
