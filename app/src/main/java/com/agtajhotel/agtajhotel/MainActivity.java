@@ -125,6 +125,18 @@ public class MainActivity extends AppCompatActivity{
 
         toolbar.setTitle("Category");
 
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this , Search.class);
+                startActivityForResult(intent , 12);
+
+            }
+        });
+
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,6 +310,38 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 12 && resultCode == RESULT_OK)
+        {
+
+            String id = data.getStringExtra("id");
+            String name = data.getStringExtra("name");
+
+            FragmentManager fm = getSupportFragmentManager();
+
+            FragmentTransaction ft = fm.beginTransaction();
+
+            SingleProduct frag = new SingleProduct();
+
+            Bundle b = new Bundle();
+            b.putString("id" , id);
+            b.putString("name" , name);
+
+            frag.setArguments(b);
+
+            ft.replace(R.id.replace , frag);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            ft.addToBackStack(null);
+            ft.commit();
+
+        }
 
     }
 

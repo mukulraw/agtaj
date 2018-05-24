@@ -10,6 +10,7 @@ import com.agtajhotel.agtajhotel.categoryPOJO.categoryBean;
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
 import com.agtajhotel.agtajhotel.ordersPOJO.ordersBean;
 import com.agtajhotel.agtajhotel.productListPOJO.productListBean;
+import com.agtajhotel.agtajhotel.searchPOJO.searchbean;
 import com.agtajhotel.agtajhotel.shippingMethodListPOJO.shippingMethodListBean;
 import com.agtajhotel.agtajhotel.shippingMethodPOJO.shippingMethodBean;
 import com.agtajhotel.agtajhotel.shippingPOJO.shippingBean;
@@ -166,6 +167,13 @@ public interface AllAPIs {
     @GET("mobileapi/customer/forgotpwd")
     Call<forgotBean> forgotPassword(
             @Query("email") String email
+    );
+
+    @GET("mobileapi/search/index")
+    Call<searchbean> search(
+            @Query("q") String query,
+            @Query("page") String page,
+            @Query("limit") String limit
     );
 
 }
