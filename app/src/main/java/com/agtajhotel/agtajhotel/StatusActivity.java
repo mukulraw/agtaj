@@ -3,6 +3,7 @@ package com.agtajhotel.agtajhotel;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,62 +45,59 @@ public class StatusActivity extends AppCompatActivity {
         progress = findViewById(R.id.progressBar4);
 
 
-
-        if (transStatus.equals("success"))
-        {
-
-
-            progress.setVisibility(View.VISIBLE);
-
-            CookieManager cookieManager = new CookieManager(new PersistentCookieStore(StatusActivity.this), CookiePolicy.ACCEPT_ALL);
-
-            CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.cookieJar(cookieJar);
-            OkHttpClient client = builder.build();
-
-            final bean b = (bean) getApplicationContext();
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(client)
-                    .build();
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-            Call<successBean> call = cr.success();
-
-            call.enqueue(new Callback<successBean>() {
-                @Override
-                public void onResponse(Call<successBean> call, Response<successBean> response) {
-
-                    image.setImageResource(R.drawable.success);
-                    text.setText("Order successfully placed. Your order ID is #" + response.body().getModel().getOrderId());
-
-                    progress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(Call<successBean> call, Throwable t) {
-                    progress.setVisibility(View.GONE);
-                }
-            });
+        switch (transStatus) {
+            case "success":
 
 
+                progress.setVisibility(View.VISIBLE);
+
+                CookieManager cookieManager = new CookieManager(new PersistentCookieStore(StatusActivity.this), CookiePolicy.ACCEPT_ALL);
+
+                CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.cookieJar(cookieJar);
+                OkHttpClient client = builder.build();
+
+                final bean b = (bean) getApplicationContext();
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call = cr.success();
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        image.setImageResource(R.drawable.success);
+                        text.setText("Order successfully placed.");
+
+                        //Log.d("response" , response.body());
+
+                        progress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        Log.d("failure", t.toString());
+                    }
+                });
 
 
-
-
-        }
-        else if (transStatus.equals("declined"))
-        {
-            text.setText("Payment has been declined by your bank");
-            image.setImageResource(R.drawable.failure);
-        }
-        else
-        {
-            text.setText("Transaction has been cancelled");
-            image.setImageResource(R.drawable.failure);
+                break;
+            case "declined":
+                text.setText("Payment has been declined by your bank");
+                image.setImageResource(R.drawable.failure);
+                break;
+            default:
+                text.setText("Transaction has been cancelled");
+                image.setImageResource(R.drawable.failure);
+                break;
         }
 
 

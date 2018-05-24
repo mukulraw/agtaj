@@ -130,16 +130,63 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
 
 
-                edit.remove("email");
-                edit.remove("pass");
-                edit.remove("id");
-                edit.remove("name");
-                edit.apply();
 
-                Intent intent = new Intent(MainActivity.this , Splash.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+
+
+                //progress.setVisibility(View.VISIBLE);
+
+                CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MainActivity.this), CookiePolicy.ACCEPT_ALL);
+
+                CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.cookieJar(cookieJar);
+                OkHttpClient client = builder.build();
+
+                final bean b = (bean) getApplicationContext();
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<logoutBean> call = cr.logout();
+
+                call.enqueue(new Callback<logoutBean>() {
+                    @Override
+                    public void onResponse(Call<logoutBean> call, Response<logoutBean> response) {
+
+                        if (response.body().getCode() == 0)
+                        {
+                            edit.remove("email");
+                            edit.remove("pass");
+                            edit.remove("id");
+                            edit.remove("name");
+                            edit.apply();
+
+                            Intent intent = new Intent(MainActivity.this , Splash.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }else
+                        {
+                            Toast.makeText(MainActivity.this , response.body().getMsg().toString() , Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<logoutBean> call, Throwable t) {
+
+                    }
+                });
+
+
+
+
+
+
 
             }
         });

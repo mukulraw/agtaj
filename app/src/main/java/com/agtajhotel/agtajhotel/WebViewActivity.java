@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -162,7 +163,7 @@ public class WebViewActivity extends AppCompatActivity {
                     } else if (html.indexOf("Aborted") != -1) {
                         status = "cancelled";
                     } else {
-                        status = "Status Not Known!";
+                        status = "success";
                     }
                     //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
@@ -179,7 +180,7 @@ public class WebViewActivity extends AppCompatActivity {
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(webview, url);
                     LoadingDialog.cancelLoading();
-                    if (url.indexOf("/ccavResponseHandler.jsp") != -1) {
+                    if (url.indexOf("/ccavResponseHandler.php") != -1) {
                         webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
                 }
@@ -187,6 +188,8 @@ public class WebViewActivity extends AppCompatActivity {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
+
+                    Log.d("url" , url);
                     LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
                 }
             });
@@ -194,8 +197,9 @@ public class WebViewActivity extends AppCompatActivity {
 
             try {
                 String postData = AvenuesParams.ACCESS_CODE + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ACCESS_CODE), "UTF-8") + "&" + AvenuesParams.MERCHANT_ID + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.MERCHANT_ID), "UTF-8") + "&" + AvenuesParams.ORDER_ID + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ORDER_ID), "UTF-8") + "&" + AvenuesParams.REDIRECT_URL + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.REDIRECT_URL), "UTF-8") + "&" + AvenuesParams.CANCEL_URL + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.CANCEL_URL), "UTF-8") + "&" + AvenuesParams.ENC_VAL + "=" + URLEncoder.encode(encVal, "UTF-8");
+                //String postData = AvenuesParams.ACCESS_CODE + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ACCESS_CODE), "UTF-8") + "&" + AvenuesParams.MERCHANT_ID + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.MERCHANT_ID), "UTF-8") + "&" + AvenuesParams.ORDER_ID + "=" + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ORDER_ID), "UTF-8") + "&" + AvenuesParams.ENC_VAL + "=" + URLEncoder.encode(encVal, "UTF-8");
                 webview.postUrl(Constants.TRANS_URL, postData.getBytes());
-            } catch (UnsupportedEncodingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

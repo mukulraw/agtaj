@@ -139,6 +139,9 @@ public class PaymentInfo extends AppCompatActivity {
                                             intent.putExtra(AvenuesParams.CURRENCY, "INR");
                                             intent.putExtra(AvenuesParams.AMOUNT, price);
 
+                                            intent.putExtra(AvenuesParams.REDIRECT_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
+                                            intent.putExtra(AvenuesParams.CANCEL_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
+                                            intent.putExtra(AvenuesParams.RSA_KEY_URL, "http://agtajhotel.com/Restaurent/api/GetRSA.php");
 
                                             startActivity(intent);
 

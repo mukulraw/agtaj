@@ -154,12 +154,18 @@ public interface AllAPIs {
     Call<formBean> getFormKey();
 
     @GET("mobileapi/checkout/success")
-    Call<successBean> success();
+    Call<String> success();
 
 
     @GET("mobileapi/order/getorderlist")
     Call<ordersBean> getOrders();
 
+    @GET("mobileapi/customer/logout")
+    Call<logoutBean> logout();
 
+    @GET("mobileapi/customer/forgotpwd")
+    Call<forgotBean> forgotPassword(
+            @Query("email") String email
+    );
 
 }

@@ -1,5 +1,6 @@
 package com.agtajhotel.agtajhotel;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.customerPOJO.customerBean;
@@ -42,6 +45,8 @@ public class Login extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor edit;
 
+    TextView forgot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,7 @@ public class Login extends AppCompatActivity {
         email = findViewById(R.id.editText);
         pass = findViewById(R.id.editText2);
         signin = findViewById(R.id.button3);
+        forgot = findViewById(R.id.textView27);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -67,6 +73,86 @@ public class Login extends AppCompatActivity {
                 finish();
             }
 
+        });
+
+
+
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(Login.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.forgot_layout);
+                dialog.show();
+
+                final EditText em = dialog.findViewById(R.id.editText13);
+                Button submit = dialog.findViewById(R.id.button15);
+                final ProgressBar bar = dialog.findViewById(R.id.progressBar6);
+
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String e = em.getText().toString();
+
+                        if (e.length() > 0)
+                        {
+
+                            bar.setVisibility(View.VISIBLE);
+                            CookieManager cookieManager = new CookieManager(new PersistentCookieStore(Login.this), CookiePolicy.ACCEPT_ALL);
+
+                            CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                            builder.cookieJar(cookieJar);
+                            OkHttpClient client = builder.build();
+
+                            final bean b = (bean) getApplicationContext();
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .client(client)
+                                    .build();
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                            Call<forgotBean> call = cr.forgotPassword(e);
+
+                            call.enqueue(new Callback<forgotBean>() {
+                                @Override
+                                public void onResponse(Call<forgotBean> call, Response<forgotBean> response) {
+
+                                    if (response.body().getCode() == 0)
+                                    {
+                                        Toast.makeText(Login.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(Login.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                    bar.setVisibility(View.GONE);
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<forgotBean> call, Throwable t) {
+                                    bar.setVisibility(View.GONE);
+                                }
+                            });
+
+
+                        }
+
+                    }
+                });
+
+
+
+            }
         });
 
 
