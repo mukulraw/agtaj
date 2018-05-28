@@ -6,17 +6,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.agtajhotel.agtajhotel.addressListPOJO.Model;
+import com.agtajhotel.agtajhotel.addressListPOJO.addressListBean;
 import com.agtajhotel.agtajhotel.billingPOJO.billingBean;
 import com.agtajhotel.agtajhotel.shippingPOJO.shippingBean;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.CookieJar;
 import okhttp3.OkHttpClient;
@@ -32,10 +38,15 @@ public class ShippingInfo extends AppCompatActivity {
     Toolbar toolbar;
     ProgressBar progress;
     Spinner spinner;
-    EditText first, last, company, address, city, state, zip, phone;
+    EditText first, last, address, city, state, zip, phone;
     CheckBox ship;
     Button next;
     String price;
+
+    List<Model> list;
+    List<String> ll;
+
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +59,7 @@ public class ShippingInfo extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         first = findViewById(R.id.editText3);
         last = findViewById(R.id.editText4);
-        company = findViewById(R.id.editText5);
+
         address = findViewById(R.id.editText6);
         city = findViewById(R.id.editText7);
         state = findViewById(R.id.editText8);
@@ -72,24 +83,121 @@ public class ShippingInfo extends AppCompatActivity {
         next = findViewById(R.id.button10);
         progress = findViewById(R.id.progress);
 
+        list = new ArrayList<>();
+        ll = new ArrayList<>();
+
+        progress.setVisibility(View.VISIBLE);
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(ShippingInfo.this), CookiePolicy.ACCEPT_ALL);
+
+        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.cookieJar(cookieJar);
+        OkHttpClient client = builder.build();
+
+        final bean b = (bean) getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<addressListBean> call = cr.getAddressList();
+
+
+        call.enqueue(new Callback<addressListBean>() {
+            @Override
+            public void onResponse(Call<addressListBean> call, Response<addressListBean> response) {
+
+                list = response.body().getModel();
+
+
+                ll.add("New Address");
+
+
+                for (int i = 0 ; i < response.body().getModel().size() ; i++)
+                {
+                    ll.add(response.body().getModel().get(i).getName());
+                }
+
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ShippingInfo.this , android.R.layout.simple_list_item_1, ll);
+
+                // Drop down layout style - list view with radio button
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                spinner.setAdapter(dataAdapter);
+
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<addressListBean> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position > 0)
+                {
+                    count = position;
+
+                    Model item = list.get(position - 1);
+
+                    first.setText(item.getFirstname());
+                    last.setText(item.getLastname());
+
+                    address.setText(item.getStreet().get(0));
+                    city.setText(item.getCity());
+                    state.setText(item.getRegion());
+                    zip.setText(item.getPostcode());
+                    phone.setText(item.getTelephone());
+
+                }
+                else
+                {
+                    count = position;
+
+                    first.setText("");
+                    last.setText("");
+
+                    address.setText("");
+                    city.setText("");
+                    state.setText("");
+                    zip.setText("");
+                    phone.setText("");
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String f = first.getText().toString();
-                String l = last.getText().toString();
-                String c = company.getText().toString();
-                String a = address.getText().toString();
-                String ci = city.getText().toString();
-                String s = state.getText().toString();
-                String z = zip.getText().toString();
-                String p = phone.getText().toString();
+                final String f = first.getText().toString();
+                final String l = last.getText().toString();
+
+                final String a = address.getText().toString();
+                final String ci = city.getText().toString();
+                final String s = state.getText().toString();
+                final String z = zip.getText().toString();
+                final String p = phone.getText().toString();
 
 
                 if (f.length() > 0) {
                     if (l.length() > 0) {
-                        if (c.length() > 0) {
+
 
                             if (a.length() > 0) {
 
@@ -125,7 +233,7 @@ public class ShippingInfo extends AppCompatActivity {
                                                         "",
                                                         f,
                                                         l,
-                                                        c,
+                                                        "",
                                                         a,
                                                         "",
                                                         ci,
@@ -143,9 +251,53 @@ public class ShippingInfo extends AppCompatActivity {
 
                                                         if (response.body().getCode() == 0)
                                                         {
-                                                            Intent intent = new Intent(ShippingInfo.this , ShippingMethod.class);
-                                                            intent.putExtra("price" , price);
-                                                            startActivity(intent);
+
+                                                            if (count > 0)
+                                                            {
+
+                                                                Intent intent = new Intent(ShippingInfo.this , ShippingMethod.class);
+                                                                intent.putExtra("price" , price);
+                                                                startActivity(intent);
+
+                                                            }
+                                                            else
+                                                            {
+                                                                Call<createAddressbean> call1 = cr.createAddress(
+                                                                        "billing,shipping",
+                                                                        l,
+                                                                        f,
+                                                                        p,
+                                                                        "",
+                                                                        "",
+                                                                        z,
+                                                                        ci,
+                                                                        a,
+                                                                        "",
+                                                                        "IN",
+                                                                        s
+                                                                );
+
+                                                                call1.enqueue(new Callback<createAddressbean>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<createAddressbean> call, Response<createAddressbean> response) {
+
+                                                                        if (response.body().getCode() == 0)
+                                                                        {
+                                                                            Intent intent = new Intent(ShippingInfo.this , ShippingMethod.class);
+                                                                            intent.putExtra("price" , price);
+                                                                            startActivity(intent);
+                                                                        }
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<createAddressbean> call, Throwable t) {
+
+                                                                    }
+                                                                });
+                                                            }
+
+
                                                         }
 
 
@@ -185,10 +337,7 @@ public class ShippingInfo extends AppCompatActivity {
                                 address.requestFocus();
                             }
 
-                        } else {
-                            company.setError("Invalid Field");
-                            company.requestFocus();
-                        }
+
                     } else {
                         last.requestFocus();
                         last.setError("Invalid Field");

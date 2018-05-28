@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 
 import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
+import com.agtajhotel.agtajhotel.cartPOJO.cartBean;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -70,10 +71,11 @@ public class MainActivity extends AppCompatActivity{
     TextView home , caart , wishlist , orders;
 
     ImageButton search;
-    ImageView cart;
+    TextView cart;
 
-    TextView count;
+    TextView count , price;
 
+    View bottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +90,16 @@ public class MainActivity extends AppCompatActivity{
         replace = findViewById(R.id.replace);
         logout = findViewById(R.id.logout);
 
+        bottom = findViewById(R.id.include);
+
         home = findViewById(R.id.home);
         caart = findViewById(R.id.cart);
         wishlist = findViewById(R.id.wishlist);
 
         count = findViewById(R.id.textView4);
+        price = findViewById(R.id.textView31);
         search = findViewById(R.id.imageButton);
-        cart = findViewById(R.id.imageView5);
+        cart = findViewById(R.id.textView32);
         orders = findViewById(R.id.orders);
 
         userame = findViewById(R.id.textView3);
@@ -353,7 +358,7 @@ public class MainActivity extends AppCompatActivity{
         userame.setText("Hi, " + name);
 
 
-        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MainActivity.this), CookiePolicy.ACCEPT_ALL);
+        /*CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MainActivity.this), CookiePolicy.ACCEPT_ALL);
 
         CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -391,9 +396,11 @@ public class MainActivity extends AppCompatActivity{
             public void onFailure(Call<cartCountBean> call, Throwable t) {
 
             }
-        });
+        });*/
 
 
+
+        setCount();
 
 
 
@@ -417,7 +424,79 @@ public class MainActivity extends AppCompatActivity{
 
     public void setCount()
     {
-        count.setText(pref.getString("count" , "0"));
+
+
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MainActivity.this), CookiePolicy.ACCEPT_ALL);
+
+        CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.cookieJar(cookieJar);
+        OkHttpClient client = builder.build();
+
+        final bean b = (bean) getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<cartBean> call = cr.getCart();
+
+        call.enqueue(new Callback<cartBean>() {
+            @Override
+            public void onResponse(Call<cartBean> call, Response<cartBean> response) {
+
+                if (response.body().getCode() == 0)
+                {
+                    if (response.body().getModel().getCartItems().size() > 0)
+                    {
+
+                        float coun = 0;
+
+                        for (int i = 0 ; i < response.body().getModel().getCartItems().size() ; i++)
+                        {
+                            coun = coun + response.body().getModel().getCartItems().get(i).getItemPrice() * response.body().getModel().getCartItems().get(i).getQty();
+                        }
+
+                        price.setText("Rs. " + String.valueOf(coun));
+
+                        bottom.setVisibility(View.VISIBLE);
+
+                        count.setText(String.valueOf(response.body().getModel().getCartItems().size()));
+
+                        //adapter.setGridData(response.body().getModel().getCartItems());
+                    }
+                    else
+                    {
+                        bottom.setVisibility(View.GONE);
+                        //adapter.setGridData(response.body().getModel().getCartItems());
+                        price.setText("Rs. 0.00");
+                        count.setText("0");
+                    }
+
+
+                }
+                else
+                {
+                    //adapter.setGridData(response.body().getModel().getCartItems());
+                    //Toast.makeText(MainActivity.this , response.body().getMsg().toString() , Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+                //progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<cartBean> call, Throwable t) {
+                //progress.setVisibility(View.GONE);
+            }
+        });
+
     }
 
 

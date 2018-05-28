@@ -2,6 +2,7 @@ package com.agtajhotel.agtajhotel;
 
 import com.agtajhotel.agtajhotel.addCartPOJO.addCartBean;
 import com.agtajhotel.agtajhotel.addWishlistPOJO.addWishlistbean;
+import com.agtajhotel.agtajhotel.addressListPOJO.addressListBean;
 import com.agtajhotel.agtajhotel.billingPOJO.billingBean;
 import com.agtajhotel.agtajhotel.cartCountPOJO.cartCountBean;
 import com.agtajhotel.agtajhotel.cartDeletePOJO.cartRemoveBean;
@@ -175,5 +176,26 @@ public interface AllAPIs {
             @Query("page") String page,
             @Query("limit") String limit
     );
+
+    @GET("mobileapi/address/getAddressList")
+    Call<addressListBean> getAddressList();
+
+    @Multipart
+    @POST("mobileapi/address/create")
+    Call<createAddressbean> createAddress(
+            @Part("address_type") String addressType,
+            @Part("lastname") String lastname,
+            @Part("firstname") String firstname,
+            @Part("telephone") String telephone,
+            @Part("company") String company,
+            @Part("fax") String fax,
+            @Part("postcode") String postcode,
+            @Part("city") String city,
+            @Part("address1") String address1,
+            @Part("address2") String address2,
+            @Part("country_id") String countryId,
+            @Part("state") String state
+    );
+
 
 }
