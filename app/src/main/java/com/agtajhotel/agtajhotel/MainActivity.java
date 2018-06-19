@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this , Orders.class);
                 startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
 
@@ -221,6 +223,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this , Cart.class);
                 startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
 
@@ -231,6 +234,7 @@ public class MainActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(MainActivity.this , Wishlist.class);
                 startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
 
             }
         });
@@ -251,6 +255,7 @@ public class MainActivity extends AppCompatActivity{
                 ft.replace(R.id.replace , frag1);
                 //ft.addToBackStack(null);
                 ft.commit();
+                drawer.closeDrawer(GravityCompat.START);
 
             }
         });
@@ -262,6 +267,7 @@ public class MainActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(MainActivity.this , Cart.class);
                 startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
 
             }
         });

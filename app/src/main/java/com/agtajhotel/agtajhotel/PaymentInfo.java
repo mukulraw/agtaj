@@ -52,7 +52,7 @@ public class PaymentInfo extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Payment Method");
+        toolbar.setTitle("Free Delivery");
         toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
