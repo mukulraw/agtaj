@@ -51,7 +51,7 @@ public class ShippingMethod extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Shipping Methods");
+        toolbar.setTitle("Free Delivery");
         toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
