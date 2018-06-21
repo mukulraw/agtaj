@@ -94,7 +94,7 @@ public class Cart extends AppCompatActivity {
 
                 Float q = Float.parseFloat(total.getText().toString());
 
-                if (q > 0)
+                if (q > 300)
                 {
 
 
@@ -103,6 +103,10 @@ public class Cart extends AppCompatActivity {
                     startActivity(intent);
 
 
+                }
+                else
+                {
+                    Toast.makeText(Cart.this , "Minimum order amount is 300.00 INR" , Toast.LENGTH_SHORT).show();
                 }
 
             }

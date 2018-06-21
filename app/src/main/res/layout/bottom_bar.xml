@@ -25,7 +25,6 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:background="#ffffff"
-        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/view4"
         app:layout_constraintStart_toEndOf="@+id/view4"
         app:layout_constraintTop_toTopOf="@+id/view4" />
@@ -35,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="@+id/view4"
         app:layout_constraintStart_toEndOf="@+id/textView30"
