@@ -127,7 +127,7 @@ public class BillingInfo extends AppCompatActivity {
                     ll.add(response.body().getModel().get(i).getName());
                 }
 
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(BillingInfo.this , android.R.layout.simple_list_item_1, ll);
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(BillingInfo.this , R.layout.spinner_item_layout, ll);
 
                 // Drop down layout style - list view with radio button
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

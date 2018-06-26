@@ -109,9 +109,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="Logout"
-            android:id="@+id/logout"
+            android:text="For Lachcha order, click here"
+            android:visibility="visible"
+            android:id="@+id/lachcha"
             />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Terms &amp; Conditions"
+            android:visibility="visible"
+            android:id="@+id/terms"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="About Us"
+            android:visibility="visible"
+            android:id="@+id/about"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cdcdcd"
+            />
+
+
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Logout" />
 
     </LinearLayout>
 

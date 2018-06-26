@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class Cart extends AppCompatActivity {
     List<CartItem> list;
     CartAdapter adapter;
     float count = 0;
+    TextView totalAmount , tax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class Cart extends AppCompatActivity {
         grid = findViewById(R.id.recyclerView);
         checkout = findViewById(R.id.button8);
         total = findViewById(R.id.textView15);
+        totalAmount = findViewById(R.id.textView37);
+        tax = findViewById(R.id.textView38);
 
 
         setSupportActionBar(toolbar);
@@ -231,7 +235,18 @@ public class Cart extends AppCompatActivity {
             car.count = car.count + (item.getItemPrice() * item.getQty());
 
 
-            car.total.setText(String.valueOf(car.count));
+            car.totalAmount.setText("Sub Total Rs. " + String.valueOf(car.count));
+
+
+            float tt = car.count;
+
+            float ta = (5 * tt) / 100;
+
+            Log.d("tax" , String.valueOf(tt));
+
+            car.tax.setText("GST(5%) Rs. " + String.valueOf(ta));
+
+            car.total.setText(String.valueOf(car.count + ta));
 
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();

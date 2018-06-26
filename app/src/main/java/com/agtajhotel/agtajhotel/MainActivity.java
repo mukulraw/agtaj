@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity{
 
     View bottom;
 
+    TextView about , terms , lachcha;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +108,9 @@ public class MainActivity extends AppCompatActivity{
 
         userame = findViewById(R.id.textView3);
 
+        about = findViewById(R.id.about);
+        terms = findViewById(R.id.terms);
+        lachcha = findViewById(R.id.lachcha);
 
         id = pref.getString("id" , "");
 
@@ -321,6 +327,47 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        lachcha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                drawer.closeDrawer(GravityCompat.START);
+
+                String url = "http://agtajlachcha.com/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+
+
+            }
+        });
+
+
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(MainActivity.this , Web.class);
+                intent.putExtra("title" , "About Us");
+                intent.putExtra("url" , "http://agtajhotel.com/Restaurent/about-us");
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+
+            }
+        });
+
+
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this , Web.class);
+                intent.putExtra("title" , "Terms & Conditions");
+                intent.putExtra("url" , "http://agtajhotel.com/Restaurent/privacy-policy");
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
 
     }
 
@@ -466,7 +513,9 @@ public class MainActivity extends AppCompatActivity{
                             coun = coun + response.body().getModel().getCartItems().get(i).getItemPrice() * response.body().getModel().getCartItems().get(i).getQty();
                         }
 
-                        price.setText("Rs. " + String.valueOf(coun));
+                        float ta = (5 * coun) / 100;
+
+                        price.setText("Rs. " + String.valueOf(coun + ta));
 
                         bottom.setVisibility(View.VISIBLE);
 

@@ -32,7 +32,8 @@
         <activity android:name=".WebViewActivity" />
         <activity android:name=".StatusActivity" />
         <activity android:name=".Orders" />
-        <activity android:name=".Search"></activity>
+        <activity android:name=".Search" />
+        <activity android:name=".Web"></activity>
     </application>
 
 </manifest>
