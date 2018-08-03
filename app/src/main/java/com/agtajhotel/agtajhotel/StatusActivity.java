@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agtajhotel.agtajhotel.successPOJO.successBean;
 
@@ -76,7 +77,9 @@ public class StatusActivity extends AppCompatActivity {
                         image.setImageResource(R.drawable.success);
                         text.setText("Order successfully placed.");
 
-                        //Log.d("response" , response.body());
+                        //Toast.makeText(StatusActivity.this , response.body() , Toast.LENGTH_SHORT).show();
+
+                        Log.d("response" , response.body());
 
                         progress.setVisibility(View.GONE);
                     }

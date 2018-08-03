@@ -283,12 +283,12 @@ public class MainActivity extends AppCompatActivity{
 
         l1.add("Dhanbad");
 
-
+        l2.add("Bank More");
+        l2.add("Digwadih");
+        l2.add("ISM");
         l2.add("Hirapur");
         l2.add("Jharia");
-        l2.add("Bank More");
-        l2.add("Steel Gate");
-        l2.add("Govindpur");
+        l2.add("Jamadoba");
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
