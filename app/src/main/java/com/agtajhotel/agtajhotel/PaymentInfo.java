@@ -101,7 +101,8 @@ public class PaymentInfo extends AppCompatActivity {
                         call = cr.setPaymentMethod("ccavenues");
                         method = "online";
                     } else {
-                        call = cr.setPaymentMethod("cashondelivery");
+                        //call = cr.setPaymentMethod("cashondelivery");
+                        call = cr.setPaymentMethod("ccavenues");
                         method = "cod";
                     }
 
@@ -110,9 +111,6 @@ public class PaymentInfo extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<shippingMethodBean> call, Response<shippingMethodBean> response) {
 
-
-
-                            //Toast.makeText(PaymentInfo.this, method , Toast.LENGTH_SHORT).show();
 
                             if (response.body().getCode() == 0) {
 
@@ -185,9 +183,56 @@ public class PaymentInfo extends AppCompatActivity {
 
 
                                 } else {
-                                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                                    intent.putExtra("transStatus", "success");
-                                    startActivity(intent);
+
+                                    progress.setVisibility(View.VISIBLE);
+
+
+                                    CookieManager cookieManager = new CookieManager(new PersistentCookieStore(PaymentInfo.this), CookiePolicy.ACCEPT_ALL);
+
+                                    CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                                    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                                    builder.cookieJar(cookieJar);
+                                    OkHttpClient client = builder.build();
+
+                                    final bean b = (bean) getApplicationContext();
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .client(client)
+                                            .build();
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                    Call<formBean> call1 = cr.getFormKey();
+
+
+                                    call1.enqueue(new Callback<formBean>() {
+                                        @Override
+                                        public void onResponse(Call<formBean> call, Response<formBean> response) {
+
+
+                                        /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
+                                        startActivity(intent);*/
+
+                                            if (response.body().getCode() == 0) {
+
+                                                Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                                                intent.putExtra("transStatus", "success");
+                                                startActivity(intent);
+
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<formBean> call, Throwable t) {
+                                            progress.setVisibility(View.GONE);
+                                        }
+                                    });
+
+
                                 }
                             }
 

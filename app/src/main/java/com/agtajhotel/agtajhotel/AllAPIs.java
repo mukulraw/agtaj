@@ -139,6 +139,8 @@ public interface AllAPIs {
     @GET("mobileapi/checkout/getShippingMethodsList")
     Call<shippingMethodListBean> getShippingMethods();
 
+    @GET("mobileapi/checkout/getOrderReview")
+    Call<String> getOrderReview();
 
     @Multipart
     @POST("mobileapi/checkout/setShippingMethod")
