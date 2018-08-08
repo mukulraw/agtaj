@@ -164,6 +164,9 @@ public interface AllAPIs {
     @GET("mobileapi/order/getorderlist")
     Call<ordersBean> getOrders();
 
+    @GET("mobileapi/order/createOrder")
+    Call<String> createOrder();
+
     @GET("mobileapi/customer/logout")
     Call<logoutBean> logout();
 

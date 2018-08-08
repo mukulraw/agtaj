@@ -102,7 +102,7 @@ public class PaymentInfo extends AppCompatActivity {
                         method = "online";
                     } else {
                         //call = cr.setPaymentMethod("cashondelivery");
-                        call = cr.setPaymentMethod("ccavenues");
+                        call = cr.setPaymentMethod("cashondelivery");
                         method = "cod";
                     }
 
@@ -112,128 +112,148 @@ public class PaymentInfo extends AppCompatActivity {
                         public void onResponse(Call<shippingMethodBean> call, Response<shippingMethodBean> response) {
 
 
+
                             if (response.body().getCode() == 0) {
 
+                                Call<String> call2 = cr.createOrder();
 
-                                if (method.equals("online")) {
-                                    progress.setVisibility(View.VISIBLE);
+                                call2.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
 
+                                        Log.d("asdasdsad" , response.body());
+                                        //Toast.makeText(PaymentInfo.this , response.body() , Toast.LENGTH_SHORT).show();
 
-                                    CookieManager cookieManager = new CookieManager(new PersistentCookieStore(PaymentInfo.this), CookiePolicy.ACCEPT_ALL);
-
-                                    CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
-                                    OkHttpClient.Builder builder = new OkHttpClient.Builder();
-                                    builder.cookieJar(cookieJar);
-                                    OkHttpClient client = builder.build();
-
-                                    final bean b = (bean) getApplicationContext();
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .client(client)
-                                            .build();
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                        if (method.equals("online")) {
+                                            progress.setVisibility(View.VISIBLE);
 
 
-                                    Call<formBean> call1 = cr.getFormKey();
+                                            CookieManager cookieManager = new CookieManager(new PersistentCookieStore(PaymentInfo.this), CookiePolicy.ACCEPT_ALL);
+
+                                            CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                                            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                                            builder.cookieJar(cookieJar);
+                                            OkHttpClient client = builder.build();
+
+                                            final bean b = (bean) getApplicationContext();
+                                            final Retrofit retrofit = new Retrofit.Builder()
+                                                    .baseUrl(b.BASE_URL)
+                                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                                    .addConverterFactory(GsonConverterFactory.create())
+                                                    .client(client)
+                                                    .build();
+                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                    call1.enqueue(new Callback<formBean>() {
-                                        @Override
-                                        public void onResponse(Call<formBean> call, Response<formBean> response) {
+                                            Call<formBean> call1 = cr.getFormKey();
+
+
+                                            call1.enqueue(new Callback<formBean>() {
+                                                @Override
+                                                public void onResponse(Call<formBean> call, Response<formBean> response) {
 
 
                                         /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
                                         startActivity(intent);*/
 
-                                            if (response.body().getCode() == 0) {
+                                                    if (response.body().getCode() == 0) {
 
 
-                                                if (method.equals("online")) {
-                                                    Intent intent = new Intent(PaymentInfo.this, WebViewActivity.class);
-                                                    intent.putExtra(AvenuesParams.ACCESS_CODE, "AVXO77FC10CE48OXEC");
-                                                    intent.putExtra(AvenuesParams.MERCHANT_ID, "171284");
-                                                    intent.putExtra(AvenuesParams.ORDER_ID, response.body().getModel());
-                                                    intent.putExtra(AvenuesParams.CURRENCY, "INR");
-                                                    intent.putExtra(AvenuesParams.AMOUNT, price);
+                                                        if (method.equals("online")) {
+                                                            Intent intent = new Intent(PaymentInfo.this, WebViewActivity.class);
+                                                            intent.putExtra(AvenuesParams.ACCESS_CODE, "AVXO77FC10CE48OXEC");
+                                                            intent.putExtra(AvenuesParams.MERCHANT_ID, "171284");
+                                                            intent.putExtra(AvenuesParams.ORDER_ID, response.body().getModel());
+                                                            intent.putExtra(AvenuesParams.CURRENCY, "INR");
+                                                            intent.putExtra(AvenuesParams.AMOUNT, price);
 
-                                                    intent.putExtra(AvenuesParams.REDIRECT_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
-                                                    intent.putExtra(AvenuesParams.CANCEL_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
-                                                    intent.putExtra(AvenuesParams.RSA_KEY_URL, "http://agtajhotel.com/Restaurent/api/GetRSA.php");
+                                                            intent.putExtra(AvenuesParams.REDIRECT_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
+                                                            intent.putExtra(AvenuesParams.CANCEL_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
+                                                            intent.putExtra(AvenuesParams.RSA_KEY_URL, "http://agtajhotel.com/Restaurent/api/GetRSA.php");
 
-                                                    startActivity(intent);
-                                                } else {
-                                                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                                                    intent.putExtra("transStatus", "success");
-                                                    startActivity(intent);
+                                                            startActivity(intent);
+                                                        } else {
+                                                            Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                                                            intent.putExtra("transStatus", "success");
+                                                            startActivity(intent);
+                                                        }
+
+
+                                                    }
+
+
                                                 }
 
-
-                                            }
-
-
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<formBean> call, Throwable t) {
-                                            progress.setVisibility(View.GONE);
-                                        }
-                                    });
+                                                @Override
+                                                public void onFailure(Call<formBean> call, Throwable t) {
+                                                    progress.setVisibility(View.GONE);
+                                                }
+                                            });
 
 
-                                } else {
+                                        } else {
 
-                                    progress.setVisibility(View.VISIBLE);
-
-
-                                    CookieManager cookieManager = new CookieManager(new PersistentCookieStore(PaymentInfo.this), CookiePolicy.ACCEPT_ALL);
-
-                                    CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
-                                    OkHttpClient.Builder builder = new OkHttpClient.Builder();
-                                    builder.cookieJar(cookieJar);
-                                    OkHttpClient client = builder.build();
-
-                                    final bean b = (bean) getApplicationContext();
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .client(client)
-                                            .build();
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                            progress.setVisibility(View.VISIBLE);
 
 
-                                    Call<formBean> call1 = cr.getFormKey();
+                                            CookieManager cookieManager = new CookieManager(new PersistentCookieStore(PaymentInfo.this), CookiePolicy.ACCEPT_ALL);
+
+                                            CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
+                                            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                                            builder.cookieJar(cookieJar);
+                                            OkHttpClient client = builder.build();
+
+                                            final bean b = (bean) getApplicationContext();
+                                            final Retrofit retrofit = new Retrofit.Builder()
+                                                    .baseUrl(b.BASE_URL)
+                                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                                    .addConverterFactory(GsonConverterFactory.create())
+                                                    .client(client)
+                                                    .build();
+                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                    call1.enqueue(new Callback<formBean>() {
-                                        @Override
-                                        public void onResponse(Call<formBean> call, Response<formBean> response) {
+                                            Call<formBean> call1 = cr.getFormKey();
+
+
+                                            call1.enqueue(new Callback<formBean>() {
+                                                @Override
+                                                public void onResponse(Call<formBean> call, Response<formBean> response) {
 
 
                                         /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
                                         startActivity(intent);*/
 
-                                            if (response.body().getCode() == 0) {
+                                                    if (response.body().getCode() == 0) {
 
-                                                Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                                                intent.putExtra("transStatus", "success");
-                                                startActivity(intent);
+                                                        Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                                                        intent.putExtra("transStatus", "success");
+                                                        startActivity(intent);
 
-                                            }
+                                                    }
+
+
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<formBean> call, Throwable t) {
+                                                    progress.setVisibility(View.GONE);
+                                                }
+                                            });
 
 
                                         }
+                                    }
 
-                                        @Override
-                                        public void onFailure(Call<formBean> call, Throwable t) {
-                                            progress.setVisibility(View.GONE);
-                                        }
-                                    });
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+
+                                    }
+                                });
 
 
-                                }
+
+
                             }
 
 
