@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.agtajhotel.agtajhotel">
+    package="com.yrl.stores">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".bean"
+        android:name="com.yrl.stores.bean"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Splash">
+        <activity android:name="com.yrl.stores.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Login" />
-        <activity android:name=".REgister" />
-        <activity android:name=".Cart" />
-        <activity android:name=".Wishlist" />
-        <activity android:name=".BillingInfo" />
-        <activity android:name=".ShippingInfo" />
-        <activity android:name=".ShippingMethod" />
-        <activity android:name=".PaymentInfo" />
-        <activity android:name=".OrderSummary" />
-        <activity android:name=".WebViewActivity" />
-        <activity android:name=".StatusActivity" />
-        <activity android:name=".Orders" />
-        <activity android:name=".Search" />
-        <activity android:name=".Web"></activity>
+        <activity android:name="com.yrl.stores.MainActivity" />
+        <activity android:name="com.yrl.stores.Login" />
+        <activity android:name="com.yrl.stores.REgister" />
+        <activity android:name="com.yrl.stores.Cart" />
+        <activity android:name="com.yrl.stores.Wishlist" />
+        <activity android:name="com.yrl.stores.BillingInfo" />
+        <activity android:name="com.yrl.stores.ShippingInfo" />
+        <activity android:name="com.yrl.stores.ShippingMethod" />
+        <activity android:name="com.yrl.stores.PaymentInfo" />
+        <activity android:name="com.yrl.stores.OrderSummary" />
+        <activity android:name="com.yrl.stores.WebViewActivity" />
+        <activity android:name="com.yrl.stores.StatusActivity" />
+        <activity android:name="com.yrl.stores.Orders" />
+        <activity android:name="com.yrl.stores.Search" />
+        <activity android:name="com.yrl.stores.Web"></activity>
     </application>
 
 </manifest>
