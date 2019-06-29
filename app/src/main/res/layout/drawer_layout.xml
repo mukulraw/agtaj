@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="Home"
             android:id="@+id/home"
             />
@@ -69,13 +69,13 @@
             android:layout_height="wrap_content"
             android:text="My Cart"
             android:id="@+id/cart"
-            android:padding="10dp"
+            android:padding="15dp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="My Wishlist"
             android:id="@+id/wishlist"
             android:visibility="gone"
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="My Orders"
             android:id="@+id/orders"
             />
@@ -92,7 +92,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="My Profile"
             android:visibility="gone"
             android:id="@+id/profile"
@@ -108,9 +108,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="For Lachcha order, click here"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/lachcha"
             />
 
@@ -118,7 +118,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="Terms &amp; Conditions"
             android:visibility="visible"
             android:id="@+id/terms"
@@ -128,7 +128,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="About Us"
             android:visibility="visible"
             android:id="@+id/about"
@@ -146,7 +146,7 @@
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="Logout" />
 
     </LinearLayout>

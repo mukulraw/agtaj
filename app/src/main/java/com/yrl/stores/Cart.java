@@ -230,7 +230,7 @@ public class Cart extends AppCompatActivity {
 
             Log.d("tax" , String.valueOf(tt));
 
-            car.tax.setText("GST(5%) Rs. " + String.valueOf(ta));
+            car.tax.setText("GST Rs. " + String.valueOf(ta));
 
             car.total.setText(String.valueOf(car.count + ta));
 

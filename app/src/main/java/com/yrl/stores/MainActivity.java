@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(MainActivity.this , Web.class);
                 intent.putExtra("title" , "About Us");
-                intent.putExtra("url" , "http://agtajhotel.com/Restaurent/about-us");
+                intent.putExtra("url" , "https://www.yrlstores.com/index.php/about-us/");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
 
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this , Web.class);
                 intent.putExtra("title" , "Terms & Conditions");
-                intent.putExtra("url" , "http://agtajhotel.com/Restaurent/privacy-policy");
+                intent.putExtra("url" , "https://www.yrlstores.com/index.php/terms-conditions/");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
             }
