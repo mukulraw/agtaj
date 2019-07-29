@@ -228,7 +228,8 @@ public class BillingInfo extends AppCompatActivity {
                                                         "IN",
                                                         p,
                                                         "",
-                                                        "1"
+                                                        "1",
+                                                        z
                                                 );
 
                                                 call.enqueue(new Callback<billingBean>() {
@@ -320,7 +321,8 @@ public class BillingInfo extends AppCompatActivity {
                                                         "IN",
                                                         p,
                                                         "",
-                                                        "0"
+                                                        "0",
+                                                        z
                                                 );
 
                                                 call.enqueue(new Callback<billingBean>() {

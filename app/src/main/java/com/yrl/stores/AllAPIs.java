@@ -111,7 +111,8 @@ public interface AllAPIs {
             @Part("billing[country_id]") String country,
             @Part("billing[telephone]") String phone,
             @Part("billing[fax]") String fax,
-            @Part("billing[use_for_shipping]") String isshipping
+            @Part("billing[use_for_shipping]") String isshipping,
+            @Part("billing[postcode]") String postcode
     );
 
 
@@ -131,7 +132,8 @@ public interface AllAPIs {
             @Part("shipping[country_id]") String country,
             @Part("shipping[telephone]") String phone,
             @Part("shipping[fax]") String fax,
-            @Part("shipping[same_as_billing]") String isbilling
+            @Part("shipping[same_as_billing]") String isbilling,
+            @Part("billing[postcode]") String postcode
     );
 
     @GET("mobileapi/checkout/getShippingMethodsList")

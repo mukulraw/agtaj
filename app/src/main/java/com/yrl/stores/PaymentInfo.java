@@ -84,7 +84,7 @@ public class PaymentInfo extends AppCompatActivity {
                     Call<shippingMethodBean> call;
 
                     if (iidd == R.id.radioButton) {
-                        call = b.getRetrofit().setPaymentMethod("ccavenues");
+                        call = b.getRetrofit().setPaymentMethod("ccsave");
                         method = "online";
                     } else {
                         //call = cr.setPaymentMethod("cashondelivery");

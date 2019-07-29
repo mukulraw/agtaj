@@ -215,7 +215,8 @@ public class ShippingInfo extends AppCompatActivity {
                                                         "IN",
                                                         p,
                                                         "",
-                                                        "0"
+                                                        "0",
+                                                        z
                                                 );
 
                                                 call.enqueue(new Callback<shippingBean>() {
