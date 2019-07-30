@@ -182,6 +182,17 @@ public interface AllAPIs {
             @Query("limit") String limit
     );
 
+    @Multipart
+    @POST("payu/hash.php")
+    Call<String> hash(
+            @Query("key") String key,
+            @Query("txnid") String txnid,
+            @Query("amount") String amount,
+            @Query("productInfo") String productInfo,
+            @Query("firstName") String firstName,
+            @Query("email") String email
+    );
+
     @GET("mobileapi/address/getAddressList")
     Call<addressListBean> getAddressList();
 

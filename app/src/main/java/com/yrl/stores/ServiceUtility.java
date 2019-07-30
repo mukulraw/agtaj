@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 
 public class ServiceUtility {
 	
-	public java.util.Map readProperties(String pFilePath)throws IOException {
+	/*public java.util.Map readProperties(String pFilePath)throws IOException {
 		java.util.Map vPropertyMap=new LinkedHashMap();
         Set vTckey;
 		Iterator<String> vTcPropItr;
@@ -91,5 +91,5 @@ public class ServiceUtility {
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 
 	    return randomNum;
-	}
+	}*/
 }

@@ -206,6 +206,10 @@ public class BillingInfo extends AppCompatActivity {
                                         if (p.length() == 10) {
 
 
+                                            SharePreferenceUtils.getInstance().saveString("phone" , p);
+                                            SharePreferenceUtils.getInstance().saveString("name" , f);
+
+
                                             if (ship.isChecked()) {
 
 

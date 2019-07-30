@@ -6,34 +6,49 @@
 
     <application
         android:name="com.yrl.stores.bean"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.yrl.stores.Splash">
+        <activity android:name="com.yrl.stores.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yrl.stores.MainActivity" />
-        <activity android:name="com.yrl.stores.Login" />
-        <activity android:name="com.yrl.stores.REgister" />
-        <activity android:name="com.yrl.stores.Cart" />
-        <activity android:name="com.yrl.stores.Wishlist" />
-        <activity android:name="com.yrl.stores.BillingInfo" />
-        <activity android:name="com.yrl.stores.ShippingInfo" />
-        <activity android:name="com.yrl.stores.ShippingMethod" />
-        <activity android:name="com.yrl.stores.PaymentInfo" />
-        <activity android:name="com.yrl.stores.OrderSummary" />
-        <activity android:name="com.yrl.stores.WebViewActivity" />
-        <activity android:name="com.yrl.stores.StatusActivity" />
-        <activity android:name="com.yrl.stores.Orders" />
-        <activity android:name="com.yrl.stores.Search" />
-        <activity android:name="com.yrl.stores.Web"></activity>
+        <activity android:name="com.yrl.stores.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Login"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.REgister"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Cart"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Wishlist"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.BillingInfo"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.ShippingInfo"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.ShippingMethod"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.PaymentInfo"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.OrderSummary"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.WebViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.StatusActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Orders"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Search"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.yrl.stores.Web"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

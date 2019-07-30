@@ -112,7 +112,6 @@ public class ShippingMethod extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<shippingMethodBean> call, Response<shippingMethodBean> response) {
 
-
                             Intent intent = new Intent(ShippingMethod.this , PaymentInfo.class);
                             intent.putExtra("price" , price);
                             startActivity(intent);

@@ -1,6 +1,8 @@
 package com.yrl.stores;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.payumoney.core.PayUmoneySdkInitializer;
+import com.payumoney.core.entity.TransactionResponse;
+import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 import com.yrl.stores.shippingMethodPOJO.shippingMethodBean;
 
 import java.net.CookieManager;
@@ -40,10 +45,28 @@ public class PaymentInfo extends AppCompatActivity {
 
     String method = "";
 
+    SharedPreferences pref;
+
+    String e , p , n;
+
+    PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
+    //declare paymentParam object
+    PayUmoneySdkInitializer.PaymentParam paymentParam = null;
+
+    String TAG = "asasdsad";
+
+    String merchantkey = "Hu6bqW29", txnid, prodname = "YRL";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_info);
+
+        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+
+        e = pref.getString("email" , "");
+        p = SharePreferenceUtils.getInstance().getString("phone");
+        n = SharePreferenceUtils.getInstance().getString("name");
 
         toolbar = findViewById(R.id.toolbar5);
         radio = findViewById(R.id.radioButton);
@@ -114,7 +137,6 @@ public class PaymentInfo extends AppCompatActivity {
                                             progress.setVisibility(View.VISIBLE);
 
 
-
                                             final bean b = (bean) getApplicationContext();
 
 
@@ -131,9 +153,52 @@ public class PaymentInfo extends AppCompatActivity {
 
                                                     if (response.body().getCode() == 0) {
 
-
                                                         if (method.equals("online")) {
-                                                            Intent intent = new Intent(PaymentInfo.this, WebViewActivity.class);
+
+                                                            txnid = response.body().getModel();
+
+                                                            builder.setAmount(price)                          // Payment amount
+                                                                    .setTxnId(response.body().getModel())                     // Transaction ID
+                                                                    .setPhone(p)                   // User Phone number
+                                                                    .setProductName(prodname)                   // Product Name or description
+                                                                    .setFirstName(n)                              // User First name
+                                                                    .setEmail(e)              // User Email ID
+                                                                    .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
+                                                                    .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
+                                                                    .setUdf1("")
+                                                                    .setUdf2("")
+                                                                    .setUdf3("")
+                                                                    .setUdf4("")
+                                                                    .setUdf5("")
+                                                                    .setUdf6("")
+                                                                    .setUdf7("")
+                                                                    .setUdf8("")
+                                                                    .setUdf9("")
+                                                                    .setUdf10("")
+                                                                    .setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
+                                                                    .setKey(merchantkey)                        // Merchant key
+                                                                    .setMerchantId("6744028");
+                                                            try {
+                                                                paymentParam = builder.build();
+                                                                // generateHashFromServer(paymentParam );
+                                                                getHashkey();
+                                                            } catch (Exception e) {
+
+                                                                Log.e(TAG, " error s "+e.toString());
+                                                            }
+
+
+
+
+
+
+
+
+
+
+
+
+                                                            /*Intent intent = new Intent(PaymentInfo.this, WebViewActivity.class);
                                                             intent.putExtra(AvenuesParams.ACCESS_CODE, "AVXO77FC10CE48OXEC");
                                                             intent.putExtra(AvenuesParams.MERCHANT_ID, "171284");
                                                             intent.putExtra(AvenuesParams.ORDER_ID, response.body().getModel());
@@ -144,7 +209,7 @@ public class PaymentInfo extends AppCompatActivity {
                                                             intent.putExtra(AvenuesParams.CANCEL_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
                                                             intent.putExtra(AvenuesParams.RSA_KEY_URL, "http://agtajhotel.com/Restaurent/api/GetRSA.php");
 
-                                                            startActivity(intent);
+                                                            startActivity(intent);*/
                                                         } else {
                                                             Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
                                                             intent.putExtra("transStatus", "success");
@@ -237,4 +302,77 @@ public class PaymentInfo extends AppCompatActivity {
 
 
     }
+
+    public void getHashkey(){
+
+        progress.setVisibility(View.VISIBLE);
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://yrlstores.com/")
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<String> call = cr.hash(merchantkey, txnid, price, prodname,
+                n, e);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.e(TAG, "hash res "+response.body());
+                String merchantHash= response.body();
+                if (merchantHash.isEmpty() || merchantHash.equals("")) {
+                    Toast.makeText(PaymentInfo.this, "Could not generate hash", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "hash empty");
+                } else {
+                    // mPaymentParams.setMerchantHash(merchantHash);
+                    paymentParam.setMerchantHash(merchantHash);
+                    // Invoke the following function to open the checkout page.
+                    // PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, StartPaymentActivity.this,-1, true);
+                    PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, PaymentInfo.this, R.style.AppTheme_default, false);
+                }
+
+                progress.setVisibility(View.GONE);
+
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e(TAG, "hash error "+ t.toString());
+                progress.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("StartPaymentActivity", "request code " + requestCode + " resultcode " + resultCode);
+        if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_OK && data != null) {
+            TransactionResponse transactionResponse = data.getParcelableExtra( PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE );
+            if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
+                if(transactionResponse.getTransactionStatus().equals( TransactionResponse.TransactionStatus.SUCCESSFUL )){
+                    //Success Transaction
+
+                    Log.d("status" , "success");
+
+                } else{
+                    Log.d("status" , "failure");
+                    //Failure Transaction
+                }
+                // Response from Payumoney
+                String payuResponse = transactionResponse.getPayuResponse();
+                // Response from SURl and FURL
+                String merchantResponse = transactionResponse.getTransactionDetails();
+                Log.e(TAG, "tran "+payuResponse+"---"+ merchantResponse);
+            } /* else if (resultModel != null && resultModel.getError() != null) {
+                Log.d(TAG, "Error response : " + resultModel.getError().getTransactionResponse());
+            } else {
+                Log.d(TAG, "Both objects are null!");
+            }*/
+        }
+    }
+
+
 }

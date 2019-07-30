@@ -1,6 +1,7 @@
 package com.yrl.stores;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -28,10 +29,17 @@ public class bean extends Application {
         return cr;
     }
 
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = getApplicationContext();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
 

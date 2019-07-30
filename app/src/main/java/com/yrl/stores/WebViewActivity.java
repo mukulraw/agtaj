@@ -132,13 +132,13 @@ public class WebViewActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            if (!ServiceUtility.chkNull(vResponse).equals("")
+            /*if (!ServiceUtility.chkNull(vResponse).equals("")
                     && ServiceUtility.chkNull(vResponse).toString().indexOf("ERROR") == -1) {
                 StringBuffer vEncVal = new StringBuffer("");
                 vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.AMOUNT, mainIntent.getStringExtra(AvenuesParams.AMOUNT)));
                 vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.CURRENCY, mainIntent.getStringExtra(AvenuesParams.CURRENCY)));
                 encVal = RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length() - 1), vResponse);  //encrypt amount and currency
-            }
+            }*/
 
             return null;
         }

@@ -195,6 +195,8 @@ public class ShippingInfo extends AppCompatActivity {
 
                                             if (p.length() == 10) {
 
+                                                SharePreferenceUtils.getInstance().saveString("phone" , p);
+                                                SharePreferenceUtils.getInstance().saveString("name" , f);
 
                                                 progress.setVisibility(View.VISIBLE);
 
