@@ -2,9 +2,9 @@ package com.yrl.stores;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,17 +15,9 @@ import android.widget.Toast;
 import com.yrl.stores.shippingMethodListPOJO.shippingMethodListBean;
 import com.yrl.stores.shippingMethodPOJO.shippingMethodBean;
 
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-
-import okhttp3.CookieJar;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ShippingMethod extends AppCompatActivity {
 
