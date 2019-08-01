@@ -102,7 +102,7 @@ public class PaymentInfo extends AppCompatActivity {
                     Call<shippingMethodBean> call;
 
                     if (iidd == R.id.radioButton) {
-                        call = b.getRetrofit().setPaymentMethod("ccsave");
+                        call = b.getRetrofit().setPaymentMethod("pumcp");
                         method = "online";
                     } else {
                         //call = cr.setPaymentMethod("cashondelivery");
@@ -349,10 +349,15 @@ public class PaymentInfo extends AppCompatActivity {
             if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
                 if(transactionResponse.getTransactionStatus().equals( TransactionResponse.TransactionStatus.SUCCESSFUL )){
                     //Success Transaction
-
+                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                    intent.putExtra("transStatus", "success");
+                    startActivity(intent);
                     Log.d("status" , "success");
 
                 } else{
+                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                    intent.putExtra("transStatus", "declined");
+                    startActivity(intent);
                     Log.d("status" , "failure");
                     //Failure Transaction
                 }

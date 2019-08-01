@@ -20,7 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class bean extends Application {
 
-    String BASE_URL = "https://www.yrlstores.com/index.php/";
+    String BASE_URL = "https://yrlstores.com/index.php/";
 
     private static AllAPIs cr;
 
