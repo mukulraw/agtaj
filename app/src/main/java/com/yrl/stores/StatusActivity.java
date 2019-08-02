@@ -38,34 +38,114 @@ public class StatusActivity extends AppCompatActivity {
         switch (transStatus) {
             case "success":
 
-
+                final bean b = (bean) getApplicationContext();
                 progress.setVisibility(View.VISIBLE);
 
 
-                final bean b = (bean) getApplicationContext();
 
-                Call<String> call = b.getRetrofit().success();
 
-                call.enqueue(new Callback<String>() {
+
+
+
+                Call<String> call2 = b.getRetrofit().createOrder();
+
+                call2.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
 
-                        image.setImageResource(R.drawable.success);
-                        text.setText("Order successfully placed.");
+                        Log.d("asdasdsad" , response.body());
+                        //Toast.makeText(PaymentInfo.this , response.body() , Toast.LENGTH_SHORT).show();
 
-                        //Toast.makeText(StatusActivity.this , response.body() , Toast.LENGTH_SHORT).show();
 
-                        Log.d("response" , response.body());
+                        progress.setVisibility(View.VISIBLE);
 
-                        progress.setVisibility(View.GONE);
+
+
+                        Call<formBean> call1 = b.getRetrofit().getFormKey();
+
+
+                        call1.enqueue(new Callback<formBean>() {
+                            @Override
+                            public void onResponse(Call<formBean> call, Response<formBean> response) {
+
+
+                                        /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
+                                        startActivity(intent);*/
+
+                                if (response.body().getCode() == 0) {
+
+                                    Call<String> call2 = b.getRetrofit().success();
+
+                                    call2.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call, Response<String> response) {
+
+                                            image.setImageResource(R.drawable.success);
+                                            text.setText("Order successfully placed.");
+
+                                            //Toast.makeText(StatusActivity.this , response.body() , Toast.LENGTH_SHORT).show();
+
+                                            Log.d("response" , response.body());
+
+                                            progress.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            progress.setVisibility(View.GONE);
+                                            Log.d("failure", t.toString());
+                                        }
+                                    });
+
+                                }
+
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<formBean> call, Throwable t) {
+                                progress.setVisibility(View.GONE);
+                            }
+                        });
+
+
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
                         progress.setVisibility(View.GONE);
-                        Log.d("failure", t.toString());
                     }
                 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 break;

@@ -119,157 +119,63 @@ public class PaymentInfo extends AppCompatActivity {
 
                             if (response.body().getCode() == 0) {
 
-                                Call<String> call2 = b.getRetrofit().createOrder();
-
-                                call2.enqueue(new Callback<String>() {
-                                    @Override
-                                    public void onResponse(Call<String> call, Response<String> response) {
-
-                                        Log.d("asdasdsad" , response.body());
-                                        //Toast.makeText(PaymentInfo.this , response.body() , Toast.LENGTH_SHORT).show();
-
-                                        if (method.equals("online")) {
-                                            progress.setVisibility(View.VISIBLE);
-
-
-                                            final bean b = (bean) getApplicationContext();
-
-
-                                            Call<formBean> call1 = b.getRetrofit().getFormKey();
-
-
-                                            call1.enqueue(new Callback<formBean>() {
-                                                @Override
-                                                public void onResponse(Call<formBean> call, Response<formBean> response) {
-
-
-                                        /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
-                                        startActivity(intent);*/
-
-                                                    if (response.body().getCode() == 0) {
-
-                                                        if (method.equals("online")) {
-
-                                                            txnid = response.body().getModel();
-
-                                                            builder.setAmount(price)                          // Payment amount
-                                                                    .setTxnId(response.body().getModel())                     // Transaction ID
-                                                                    .setPhone(p)                   // User Phone number
-                                                                    .setProductName(prodname)                   // Product Name or description
-                                                                    .setFirstName(n)                              // User First name
-                                                                    .setEmail(e)              // User Email ID
-                                                                    .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
-                                                                    .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
-                                                                    .setUdf1("")
-                                                                    .setUdf2("")
-                                                                    .setUdf3("")
-                                                                    .setUdf4("")
-                                                                    .setUdf5("")
-                                                                    .setUdf6("")
-                                                                    .setUdf7("")
-                                                                    .setUdf8("")
-                                                                    .setUdf9("")
-                                                                    .setUdf10("")
-                                                                    .setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
-                                                                    .setKey(merchantkey)                        // Merchant key
-                                                                    .setMerchantId("6744028");
-                                                            try {
-                                                                paymentParam = builder.build();
-                                                                // generateHashFromServer(paymentParam );
-                                                                getHashkey();
-                                                            } catch (Exception e) {
-
-                                                                Log.e(TAG, " error s "+e.toString());
-                                                            }
 
 
 
 
+                                if (method.equals("online")) {
 
+                                    //txnid = String.valueOf(System.currentTimeMillis());
+                                    txnid = "2";
 
+                                    builder.setAmount(price)                          // Payment amount
+                                            .setTxnId(txnid)                     // Transaction ID
+                                            .setPhone(p)                   // User Phone number
+                                            .setProductName(prodname)                   // Product Name or description
+                                            .setFirstName(n)                              // User First name
+                                            .setEmail(e)              // User Email ID
+                                            .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
+                                            .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
+                                            .setUdf1("")
+                                            .setUdf2("")
+                                            .setUdf3("")
+                                            .setUdf4("")
+                                            .setUdf5("")
+                                            .setUdf6("")
+                                            .setUdf7("")
+                                            .setUdf8("")
+                                            .setUdf9("")
+                                            .setUdf10("")
+                                            .setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
+                                            .setKey(merchantkey)                        // Merchant key
+                                            .setMerchantId("6744028");
+                                    try {
+                                        paymentParam = builder.build();
+                                        // generateHashFromServer(paymentParam );
+                                        getHashkey();
+                                    } catch (Exception e) {
 
-
-
-
-
-
-                                                            /*Intent intent = new Intent(PaymentInfo.this, WebViewActivity.class);
-                                                            intent.putExtra(AvenuesParams.ACCESS_CODE, "AVXO77FC10CE48OXEC");
-                                                            intent.putExtra(AvenuesParams.MERCHANT_ID, "171284");
-                                                            intent.putExtra(AvenuesParams.ORDER_ID, response.body().getModel());
-                                                            intent.putExtra(AvenuesParams.CURRENCY, "INR");
-                                                            intent.putExtra(AvenuesParams.AMOUNT, price);
-
-                                                            intent.putExtra(AvenuesParams.REDIRECT_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
-                                                            intent.putExtra(AvenuesParams.CANCEL_URL, "http://agtajhotel.com/Restaurent/api/ccavResponseHandler.php");
-                                                            intent.putExtra(AvenuesParams.RSA_KEY_URL, "http://agtajhotel.com/Restaurent/api/GetRSA.php");
-
-                                                            startActivity(intent);*/
-                                                        } else {
-                                                            Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                                                            intent.putExtra("transStatus", "success");
-                                                            startActivity(intent);
-                                                        }
-
-
-                                                    }
-
-
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<formBean> call, Throwable t) {
-                                                    progress.setVisibility(View.GONE);
-                                                }
-                                            });
-
-
-                                        } else {
-
-                                            progress.setVisibility(View.VISIBLE);
-
-
-
-                                            final bean b = (bean) getApplicationContext();
-
-
-                                            Call<formBean> call1 = b.getRetrofit().getFormKey();
-
-
-                                            call1.enqueue(new Callback<formBean>() {
-                                                @Override
-                                                public void onResponse(Call<formBean> call, Response<formBean> response) {
-
-
-                                        /*Intent intent = new Intent(PaymentInfo.this , OrderSummary.class);
-                                        startActivity(intent);*/
-
-                                                    if (response.body().getCode() == 0) {
-
-                                                        Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                                                        intent.putExtra("transStatus", "success");
-                                                        startActivity(intent);
-
-                                                    }
-
-
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<formBean> call, Throwable t) {
-                                                    progress.setVisibility(View.GONE);
-                                                }
-                                            });
-
-
-                                        }
+                                        Log.e(TAG, " error s "+e.toString());
                                     }
 
-                                    @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
+                                } else {
 
-                                    }
-                                });
+
+                                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+                                    intent.putExtra("transStatus", "success");
+                                    startActivity(intent);
+
+
+                                }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,7 +183,7 @@ public class PaymentInfo extends AppCompatActivity {
                             }
 
 
-                            progress.setVisibility(View.GONE);
+
 
                         }
 

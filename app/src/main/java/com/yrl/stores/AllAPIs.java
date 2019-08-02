@@ -185,12 +185,12 @@ public interface AllAPIs {
     @Multipart
     @POST("payu/hash.php")
     Call<String> hash(
-            @Query("key") String key,
-            @Query("txnid") String txnid,
-            @Query("amount") String amount,
-            @Query("productInfo") String productInfo,
-            @Query("firstName") String firstName,
-            @Query("email") String email
+            @Part("key") String key,
+            @Part("txnid") String txnid,
+            @Part("amount") String amount,
+            @Part("productInfo") String productInfo,
+            @Part("firstName") String firstName,
+            @Part("email") String email
     );
 
     @GET("mobileapi/address/getAddressList")
