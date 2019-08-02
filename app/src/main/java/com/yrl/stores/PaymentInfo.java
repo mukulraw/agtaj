@@ -1,12 +1,18 @@
 package com.yrl.stores;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +21,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.payumoney.core.PayUmoneyConstants;
 import com.payumoney.core.PayUmoneySdkInitializer;
 import com.payumoney.core.entity.TransactionResponse;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
+import com.payumoney.sdkui.ui.utils.ResultModel;
 import com.yrl.stores.shippingMethodPOJO.shippingMethodBean;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,24 +54,22 @@ public class PaymentInfo extends AppCompatActivity {
 
     SharedPreferences pref;
 
-    String e , p , n;
+    String e, p, n;
 
-    PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
-    //declare paymentParam object
-    PayUmoneySdkInitializer.PaymentParam paymentParam = null;
 
     String TAG = "asasdsad";
 
     String merchantkey = "Hu6bqW29", txnid, prodname = "YRL";
+    private PayUmoneySdkInitializer.PaymentParam mPaymentParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_info);
 
-        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
 
-        e = pref.getString("email" , "");
+        e = pref.getString("email", "");
         p = SharePreferenceUtils.getInstance().getString("phone");
         n = SharePreferenceUtils.getInstance().getString("name");
 
@@ -116,46 +126,73 @@ public class PaymentInfo extends AppCompatActivity {
                         public void onResponse(Call<shippingMethodBean> call, Response<shippingMethodBean> response) {
 
 
-
                             if (response.body().getCode() == 0) {
-
-
-
 
 
                                 if (method.equals("online")) {
 
                                     //txnid = String.valueOf(System.currentTimeMillis());
-                                    txnid = "2";
+                                    PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
 
-                                    builder.setAmount(price)                          // Payment amount
-                                            .setTxnId(txnid)                     // Transaction ID
-                                            .setPhone(p)                   // User Phone number
-                                            .setProductName(prodname)                   // Product Name or description
-                                            .setFirstName(n)                              // User First name
-                                            .setEmail(e)              // User Email ID
-                                            .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
-                                            .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
-                                            .setUdf1("")
-                                            .setUdf2("")
-                                            .setUdf3("")
-                                            .setUdf4("")
-                                            .setUdf5("")
-                                            .setUdf6("")
-                                            .setUdf7("")
-                                            .setUdf8("")
-                                            .setUdf9("")
-                                            .setUdf10("")
-                                            .setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
-                                            .setKey(merchantkey)                        // Merchant key
+
+                                    String txnId = System.currentTimeMillis() + "";
+                                    //String txnId = "TXNID720431525261327973";
+                                    String udf1 = "";
+                                    String udf2 = "";
+                                    String udf3 = "";
+                                    String udf4 = "";
+                                    String udf5 = "";
+                                    String udf6 = "";
+                                    String udf7 = "";
+                                    String udf8 = "";
+                                    String udf9 = "";
+                                    String udf10 = "";
+
+                                    builder.setAmount(price)
+                                            .setTxnId(txnId)
+                                            .setPhone(p)
+                                            .setProductName(prodname)
+                                            .setFirstName(n)
+                                            .setEmail(e)
+                                            .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")
+                                            .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")
+                                            .setUdf1(udf1)
+                                            .setUdf2(udf2)
+                                            .setUdf3(udf3)
+                                            .setUdf4(udf4)
+                                            .setUdf5(udf5)
+                                            .setUdf6(udf6)
+                                            .setUdf7(udf7)
+                                            .setUdf8(udf8)
+                                            .setUdf9(udf9)
+                                            .setUdf10(udf10)
+                                            .setIsDebug(false)
+                                            .setKey(merchantkey)
                                             .setMerchantId("6744028");
-                                    try {
-                                        paymentParam = builder.build();
-                                        // generateHashFromServer(paymentParam );
-                                        getHashkey();
-                                    } catch (Exception e) {
 
-                                        Log.e(TAG, " error s "+e.toString());
+                                    try {
+                                        mPaymentParams = builder.build();
+
+                                        /*
+                                         * Hash should always be generated from your server side.
+                                         * */
+                                        //    generateHashFromServer(mPaymentParams);
+
+                                        /*            *//**
+                                         * Do not use below code when going live
+                                         * Below code is provided to generate hash from sdk.
+                                         * It is recommended to generate hash from server side only.
+                                         * */
+                                        mPaymentParams = calculateServerSideHashAndInitiatePayment1(mPaymentParams);
+
+
+                                        PayUmoneyFlowManager.startPayUMoneyFlow(mPaymentParams, PaymentInfo.this, R.style.AppTheme_default, true);
+
+
+                                    } catch (Exception e) {
+                                        // some exception occurred
+                                        Toast.makeText(PaymentInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
                                     }
 
                                 } else {
@@ -169,20 +206,7 @@ public class PaymentInfo extends AppCompatActivity {
                                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
                             }
-
-
 
 
                         }
@@ -204,7 +228,7 @@ public class PaymentInfo extends AppCompatActivity {
 
     }
 
-    public void getHashkey(){
+    /*public void getHashkey(){
 
         progress.setVisibility(View.VISIBLE);
         final Retrofit retrofit = new Retrofit.Builder()
@@ -241,37 +265,85 @@ public class PaymentInfo extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
             }
         });
+    }*/
+
+    private PayUmoneySdkInitializer.PaymentParam calculateServerSideHashAndInitiatePayment1(final PayUmoneySdkInitializer.PaymentParam paymentParam) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        HashMap<String, String> params = paymentParam.getParams();
+        stringBuilder.append(params.get(PayUmoneyConstants.KEY) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.TXNID) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.AMOUNT) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.PRODUCT_INFO) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.FIRSTNAME) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.EMAIL) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.UDF1) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.UDF2) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.UDF3) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.UDF4) + "|");
+        stringBuilder.append(params.get(PayUmoneyConstants.UDF5) + "||||||");
+
+        stringBuilder.append("wh1W0gUEUO");
+
+        String hash = hashCal(stringBuilder.toString());
+
+        Log.d("server hash", hash);
+
+        paymentParam.setMerchantHash(hash);
+
+        return paymentParam;
     }
 
-
+    public static String hashCal(String str) {
+        byte[] hashseq = str.getBytes();
+        StringBuilder hexString = new StringBuilder();
+        try {
+            MessageDigest algorithm = MessageDigest.getInstance("SHA-512");
+            algorithm.reset();
+            algorithm.update(hashseq);
+            byte messageDigest[] = algorithm.digest();
+            for (byte aMessageDigest : messageDigest) {
+                String hex = Integer.toHexString(0xFF & aMessageDigest);
+                if (hex.length() == 1) {
+                    hexString.append("0");
+                }
+                hexString.append(hex);
+            }
+        } catch (NoSuchAlgorithmException ignored) {
+        }
+        return hexString.toString();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.e("StartPaymentActivity", "request code " + requestCode + " resultcode " + resultCode);
+
+
+
+
         if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_OK && data != null) {
-            TransactionResponse transactionResponse = data.getParcelableExtra( PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE );
+            TransactionResponse transactionResponse = data.getParcelableExtra(PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE);
             if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
-                if(transactionResponse.getTransactionStatus().equals( TransactionResponse.TransactionStatus.SUCCESSFUL )){
+                if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     //Success Transaction
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
                     intent.putExtra("transStatus", "success");
                     startActivity(intent);
-                    Log.d("status" , "success");
+                    Log.d("status", "success");
 
-                } else{
+                } else {
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
                     intent.putExtra("transStatus", "declined");
                     startActivity(intent);
-                    Log.d("status" , "failure");
+                    Log.d("status", "failure");
                     //Failure Transaction
                 }
                 // Response from Payumoney
                 String payuResponse = transactionResponse.getPayuResponse();
                 // Response from SURl and FURL
                 String merchantResponse = transactionResponse.getTransactionDetails();
-                Log.e(TAG, "tran "+payuResponse+"---"+ merchantResponse);
+                Log.e(TAG, "tran " + payuResponse + "---" + merchantResponse);
             } /* else if (resultModel != null && resultModel.getError() != null) {
                 Log.d(TAG, "Error response : " + resultModel.getError().getTransactionResponse());
             } else {
