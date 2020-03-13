@@ -62,8 +62,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="1b124a" />
-                                      <entry key="foregroundImage" value="C:\Users\mukul\Desktop\logo.png" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="C:\Users\mukul\Desktop\logo.jpeg" />
                                     </map>
                                   </option>
                                 </PersistentState>
