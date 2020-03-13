@@ -116,6 +116,7 @@ public class Login extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<forgotBean> call, Throwable t) {
                                     bar.setVisibility(View.GONE);
+                                    t.printStackTrace();
                                 }
                             });
 
@@ -189,7 +190,7 @@ public class Login extends AppCompatActivity {
                             public void onFailure(Call<customerBean> call, Throwable t) {
 
                                 progress.setVisibility(View.GONE);
-
+                                t.printStackTrace();
                             }
                         });
 
