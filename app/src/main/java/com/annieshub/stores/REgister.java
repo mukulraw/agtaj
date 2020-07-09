@@ -138,26 +138,31 @@ public class REgister extends AppCompatActivity {
                                     else
                                     {
                                         //rp error
+                                        Toast.makeText(REgister.this, "Passwords did not match", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else
                                 {
                                     //pass error
+                                    Toast.makeText(REgister.this, "Invalid password", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             else
                             {
                                 //phone error
+                                Toast.makeText(REgister.this, "Invalid phone", Toast.LENGTH_SHORT).show();
                             }
                         }
                         else
                         {
                             //email error
+                            Toast.makeText(REgister.this, "Invalid email", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else
                     {
                         //ln error
+                        Toast.makeText(REgister.this, "Invalid last name", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -165,6 +170,7 @@ public class REgister extends AppCompatActivity {
                 else
                 {
                     //fn error
+                    Toast.makeText(REgister.this, "Invalid first name", Toast.LENGTH_SHORT).show();
                 }
 
 

@@ -8,8 +8,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -46,21 +48,24 @@ public class bean extends Application {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         CookieHandler cookieHandler = new CookieManager();
+/*
         OkHttpClient client = new OkHttpClient.Builder().addNetworkInterceptor(interceptor)
                 .cookieJar(new JavaNetCookieJar(cookieHandler))
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
+*/
 
 
-        /*CookieManager cookieManager = new CookieManager(new PersistentCookieStore(getApplicationContext()), CookiePolicy.ACCEPT_ALL);
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(getApplicationContext()), CookiePolicy.ACCEPT_ALL);
 
         CookieJar cookieJar = new JavaNetCookieJar(cookieManager);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cookieJar(cookieJar);
+        builder.addInterceptor(interceptor);
         OkHttpClient client = builder.build();
-*/
+
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())

@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.annieshub.stores.shippingMethodListPOJO.shippingMethodListBean;
 import com.payumoney.core.PayUmoneyConstants;
 import com.payumoney.core.PayUmoneySdkInitializer;
 import com.payumoney.core.entity.TransactionResponse;
@@ -90,6 +91,32 @@ public class PaymentInfo extends AppCompatActivity {
 
         });
 
+        progress.setVisibility(View.VISIBLE);
+
+
+        final bean b = (bean) getApplicationContext();
+
+        final Call<String> call = b.getRetrofit().getPayMethodsList();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                /*for (int i = 0 ; i < response.body().getModel().getFlatRate().size() ; i++)
+                {
+                    RadioButton rb = new RadioButton(ShippingMethod.this);
+                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle() + " \u20b9 " + response.body().getModel().getFlatRate().get(i).getPrice());
+                    group.addView(rb);
+                }*/
+
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -67,7 +67,7 @@ public class ShippingMethod extends AppCompatActivity {
                 for (int i = 0 ; i < response.body().getModel().getFlatRate().size() ; i++)
                 {
                     RadioButton rb = new RadioButton(ShippingMethod.this);
-                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle() + " " + response.body().getModel().getFlatRate().get(i).getPrice());
+                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle() + " \u20b9 " + response.body().getModel().getFlatRate().get(i).getPrice());
                     group.addView(rb);
                 }
 

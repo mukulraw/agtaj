@@ -139,6 +139,12 @@ public interface AllAPIs {
     @GET("mobileapi/checkout/getShippingMethodsList")
     Call<shippingMethodListBean> getShippingMethods();
 
+    @GET("mobileapi/checkout/getPayMethodsList")
+    Call<String> getPayMethodsList();
+
+    @GET("mobileapi/banner/getbanner")
+    Call<String> getbanner();
+
     @GET("mobileapi/checkout/getOrderReview")
     Call<String> getOrderReview();
 

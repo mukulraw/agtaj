@@ -198,11 +198,12 @@ public class Login extends AppCompatActivity {
                     else
                     {
                         //password error
+                        Toast.makeText(Login.this, "Invalid password", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
                 {
-                    //Email error
+                    Toast.makeText(Login.this, "Invalid email", Toast.LENGTH_SHORT).show();
                 }
 
 

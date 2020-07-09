@@ -130,6 +130,30 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
+        final bean b = (bean) getApplicationContext();
+
+        final Call<String> call = b.getRetrofit().getbanner();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                /*for (int i = 0 ; i < response.body().getModel().getFlatRate().size() ; i++)
+                {
+                    RadioButton rb = new RadioButton(ShippingMethod.this);
+                    rb.setText(response.body().getModel().getFlatRate().get(i).getMethodTitle() + " \u20b9 " + response.body().getModel().getFlatRate().get(i).getPrice());
+                    group.addView(rb);
+                }*/
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
