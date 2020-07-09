@@ -4,9 +4,9 @@
     >
 
     <solid
-        android:color="#193587"/>
+        android:color="@color/colorAccent"/>
 
     <corners
-        android:radius="2dp"/>
+        android:radius="30dp"/>
 
 </shape>

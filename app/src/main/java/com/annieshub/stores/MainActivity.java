@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(MainActivity.this , Web.class);
                 intent.putExtra("title" , "About Us");
-                intent.putExtra("url" , "https://www.yrlstores.com/index.php/about-us/");
+                intent.putExtra("url" , "http://annieshub.in/index.php/about-magento-demo-store");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
 
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this , Web.class);
                 intent.putExtra("title" , "Terms & Conditions");
-                intent.putExtra("url" , "https://www.yrlstores.com/index.php/terms-conditions/");
+                intent.putExtra("url" , "http://annieshub.in/index.php/customer-service/");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
             }
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity{
 
                         float ta = (0 * coun) / 100;
 
-                        price.setText("Rs. " + String.valueOf(coun + ta));
+                        price.setText("₹ " + String.valueOf(coun + ta));
 
                         bottom.setVisibility(View.VISIBLE);
 
@@ -506,7 +506,7 @@ public class MainActivity extends AppCompatActivity{
                     {
                         bottom.setVisibility(View.GONE);
                         //adapter.setGridData(response.body().getModel().getCartItems());
-                        price.setText("Rs. 0.00");
+                        price.setText("₹ 0.00");
                         count.setText("0");
                     }
 

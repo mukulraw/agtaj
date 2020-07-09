@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="Home"
+            android:textSize="16sp"
             android:id="@+id/home"
             />
 
@@ -69,6 +70,7 @@
             android:layout_height="wrap_content"
             android:text="My Cart"
             android:id="@+id/cart"
+            android:textSize="16sp"
             android:padding="15dp"
             />
 
@@ -78,6 +80,7 @@
             android:padding="15dp"
             android:text="My Wishlist"
             android:id="@+id/wishlist"
+            android:textSize="16sp"
             android:visibility="gone"
             />
 
@@ -86,6 +89,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="My Orders"
+            android:textSize="16sp"
             android:id="@+id/orders"
             />
 
@@ -95,6 +99,7 @@
             android:padding="15dp"
             android:text="My Profile"
             android:visibility="gone"
+            android:textSize="16sp"
             android:id="@+id/profile"
             />
 
@@ -111,6 +116,7 @@
             android:padding="15dp"
             android:text="For Lachcha order, click here"
             android:visibility="gone"
+            android:textSize="16sp"
             android:id="@+id/lachcha"
             />
 
@@ -120,6 +126,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="Terms &amp; Conditions"
+            android:textSize="16sp"
             android:visibility="visible"
             android:id="@+id/terms"
             />
@@ -130,6 +137,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="About Us"
+            android:textSize="16sp"
             android:visibility="visible"
             android:id="@+id/about"
             />
@@ -147,6 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
+            android:textSize="16sp"
             android:text="Logout" />
 
     </LinearLayout>

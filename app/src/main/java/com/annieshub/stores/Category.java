@@ -58,7 +58,7 @@ public class Category extends Fragment {
         pager = view.findViewById(R.id.pager);
         indicator = view.findViewById(R.id.circle);
         grid = view.findViewById(R.id.grid);
-        manager = new GridLayoutManager(getContext() , 2);
+        manager = new GridLayoutManager(getContext() , 1);
 
         adapter = new CategoryAdapter(getContext() , list);
 
@@ -174,7 +174,7 @@ public class Category extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder
         {
-            RoundedImageView image;
+            ImageView image;
             TextView title;
 
             public ViewHolder(View itemView) {
@@ -191,9 +191,8 @@ public class Category extends Fragment {
     {
 
         int bannersp[] = new int[]{
-                R.drawable.b1,
-                R.drawable.b2,
-                R.drawable.b3
+                R.drawable.slider2_1,
+                R.drawable.slider3_1
         };
 
         public BannerAdapter(FragmentManager fm) {
@@ -211,7 +210,7 @@ public class Category extends Fragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
     }
 
