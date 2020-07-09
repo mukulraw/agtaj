@@ -86,7 +86,13 @@ public class SingleProduct extends Fragment {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
                 ImageLoader loader = ImageLoader.getInstance();
-                loader.displayImage(response.body().getModel().getImageUrl() , image , options);
+                try {
+                    loader.displayImage(response.body().getModel().getMediaGallery().get(0) , image , options);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 price.setText(response.body().getModel().getSymbol() + " " + response.body().getModel().getPrice());
 
                 shareLink = response.body().getModel().getUrlKey();
