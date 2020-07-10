@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity{
 
     View bottom;
 
-    TextView about , terms , lachcha;
+    TextView about , terms , lachcha , whatsapp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity{
         search = findViewById(R.id.imageButton);
         cart = findViewById(R.id.textView32);
         orders = findViewById(R.id.orders);
+        whatsapp = findViewById(R.id.whatsapp);
 
         userame = findViewById(R.id.textView3);
 
@@ -360,6 +361,19 @@ public class MainActivity extends AppCompatActivity{
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
+
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + "+919416178452" + "&text=" + "Hello WhatsApp!!");
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(sendIntent);
+
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
 
     }
 

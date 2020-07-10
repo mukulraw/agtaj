@@ -158,6 +158,18 @@
             android:textSize="16sp"
             android:text="Logout" />
 
+        <TextView
+            android:id="@+id/whatsapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:drawableStart="@drawable/ic_whatsapp"
+            android:drawablePadding="10dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:text="Contact Us" />
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -146,8 +146,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_arrow_drop_down_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\mukul" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_whatsapp" />
+                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\whatsapp (1).svg" />
                           </map>
                         </option>
                       </PersistentState>
