@@ -43,7 +43,6 @@ public class Cart extends AppCompatActivity {
     GridLayoutManager manager;
     List<CartItem> list;
     CartAdapter adapter;
-    float count = 0;
     TextView totalAmount , tax;
 
     @Override
@@ -126,8 +125,6 @@ public class Cart extends AppCompatActivity {
     public void loadData()
     {
 
-        count = 0;
-
         progress.setVisibility(View.VISIBLE);
 
 
@@ -141,15 +138,42 @@ public class Cart extends AppCompatActivity {
 
                 if (response.body().getCode() == 0)
                 {
+
+
                     if (response.body().getModel().getCartItems().size() > 0)
                     {
+
                         adapter.setGridData(response.body().getModel().getCartItems());
+
+                        float coun = 0;
+
+                        for (int i = 0 ; i < response.body().getModel().getCartItems().size() ; i++)
+                        {
+                            coun = coun + response.body().getModel().getCartItems().get(i).getItemPrice() * response.body().getModel().getCartItems().get(i).getQty();
+                        }
+
+                        float ta = (0 * coun) / 100;
+
+
+                        tax.setText("GST ₹ " + String.valueOf(ta));
+
+                        total.setText(String.valueOf(coun + ta));
+                        totalAmount.setText("Sub Total ₹ " + String.valueOf(coun));
+
+
+                        //adapter.setGridData(response.body().getModel().getCartItems());
                     }
                     else
                     {
+
                         adapter.setGridData(response.body().getModel().getCartItems());
                         total.setText("0.00");
+                        totalAmount.setText("Sub Total ₹ 0.00");
+
                     }
+
+
+
 
 
                 }
@@ -208,24 +232,12 @@ public class Cart extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
+            holder.setIsRecyclable(false);
+
             final CartItem item = list.get(position);
 
 
-            car.count = car.count + (item.getItemPrice() * item.getQty());
 
-
-            car.totalAmount.setText("Sub Total Rs. " + String.valueOf(car.count));
-
-
-            float tt = car.count;
-
-            float ta = (0 * tt) / 100;
-
-            Log.d("tax" , String.valueOf(tt));
-
-            car.tax.setText("GST Rs. " + String.valueOf(ta));
-
-            car.total.setText(String.valueOf(car.count + ta));
 
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
