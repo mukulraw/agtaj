@@ -158,7 +158,7 @@ public class SubCategory extends Fragment {
             progress.setVisibility(View.VISIBLE);
             final bean b1 = (bean) getContext().getApplicationContext();
 
-            Call<productListBean> call = b1.getRetrofit().getProductsList("catalog" , "1" , "20" , "entity_id" , "asc" , id);
+            Call<productListBean> call = b1.getRetrofit().getProductsList("catalog" , "1" , "200" , "entity_id" , "asc" , id);
 
             call.enqueue(new Callback<productListBean>() {
                 @Override
